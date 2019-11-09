@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Upload</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="">
+  <style type="text/css">
+    nav {
+      height: 50px;
+      background-color: #333;
+      width: 100%;
+      color: white;
+      text-align: center;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .experiments {
+      background-color: #999;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      color: aliceblue;
+      padding: 5px;
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+
+    .experiment {
+      background-color: slategrey;
+      border: 2px solid white;
+      border-radius: 10px;
+      margin-top: 1em;
+      max-width: 400px;
+      height: 350px;
+    }
+
+    .image {
+      display: flex;
+      margin-top: 5px;
+      align-self: center;
+      margin-right: auto;
+      margin-left: auto;
+      text-align: center;
+      height: 300px;
+      width: 300px;
+      background-color: black;
+    }
+
+    .info {
+      margin-top: 3px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-around;
+    }
+    .preview {
+      height: 300px;
+      width: 300px;
+      background-color: black;
+      text-align: center;
+    }
+
+    @media screen and (min-width: 600px) {
+      .experiments {
+        flex-direction: row;
+        flex-flow: row;
+        padding: 1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>navbar</nav>
+  <main>
+    <h2>Upload your image</h2>
+    <section class="experiments">
+
+
+      <div class="upload">
+        <form class="uploadform">
+          <label for="celltype">Cell Type</label>
+          <input type="text" id="celltype" name="celltype" />
+          <div class="uploadbox">
+            <div class="preview">Preview</div>
+            <button>Select image to upload</button>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+
+      </div>
+    </section>
+  </main>
+  <script src="" async defer></script>
+</body>
+
+</html>

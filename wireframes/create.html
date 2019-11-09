@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Create</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style type="text/css">
+      * {
+        padding: none;
+        margin: 0;
+      }
+      nav {
+        height: 50px;
+        background-color: #333;
+        width: 100%;
+        color: white;
+        text-align: center;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      .imagearea {
+        background-color: #999;
+        height: 60vh;
+        width: 100%;
+      }
+
+      .cell {
+        color: lightblue;
+        background-color: lightblue;
+        border: blue solid 1px;
+        border-radius: 100%;
+        display: block;
+        width: 10px;
+        height: 10px;
+      }
+
+
+      .marked::after {
+        content: attr(data-marked);
+        text-indent: 30px;
+        color: red;
+        border: solid red 1px;
+        height: 25px;
+        width: 25px;
+        transform:  translateX(-25%) translateY(-25%);
+        position: absolute;
+        background-color: transparent;
+      }
+
+      .box {
+        position: relative;
+        border-color: white;
+        height: 10px;
+        width: 10px;
+        color: white;
+      }
+
+      .cellbutton {
+        border-radius: 100%;
+        border: cornflowerblue solid 3px;
+        background-color: lightblue;
+        color: #333;
+        height: 30px;
+        width: 30px;
+        cursor: pointer;
+      }
+
+      .toolbox {
+        background-color: #333;
+        height: calc(30vh - 50px);
+        color: white;
+        padding-left: 1em;
+        padding-right: 1em;
+      }
+
+      .toolbox h3 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <nav>navbar</nav> -->
+    <div class="mainarea">
+      <div class="imagearea">
+        <a class="cell marked" data-marked="1" style="position: relative; left: 205px; top:421px "></a>
+        <a class="cell" style="position: absolute; left: 296px; top:256px "></a>
+        <a class="cell marked" data-marked="2" style="position: absolute; left: 392px; top:186px "></a>
+        <a class="cell" style="position: absolute; left: 25px; top:186px "></a>
+        <a class="cell marked" data-marked="3" style="position: absolute; left: 420px; top:90px "></a>
+        <a class="cell" style="position: absolute; left: 29px; top:500px "></a>
+        <a class="cell" style="position: absolute; left: 195px; top:386px "></a>
+        <a class="cell" style="position: absolute; left: 46px; top:73px "></a>
+      </div>
+      <div class="toolbox">
+        <h3>Counted: 3</h3>
+        <button class="cellbutton">1</button>
+        <button class="cellbutton">2</button>
+        <button class="cellbutton">3</button>
+      </div>
+    </div>
+    <div class="options">
+      <button>Done!</button>
+      <button>Discard</button>
+
+    </div>
+    <script src="" async defer></script>
+  </body>
+</html>

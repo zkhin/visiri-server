@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="375" height="667" viewBox="0 0 375 667">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-_4_Sign_Up);
+      }
+
+      .cls-3 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-12, .cls-4, .cls-9 {
+        fill: #2699fb;
+      }
+
+      .cls-11, .cls-5, .cls-7 {
+        fill: #fff;
+      }
+
+      .cls-5 {
+        font-size: 12px;
+        font-family: Arial-BoldMT, Arial;
+        font-weight: 700;
+      }
+
+      .cls-6 {
+        clip-path: url(#clip-path-2);
+      }
+
+      .cls-8 {
+        fill: #bce0fd;
+      }
+
+      .cls-9 {
+        font-size: 14px;
+      }
+
+      .cls-12, .cls-9 {
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-10 {
+        clip-path: url(#clip-path-3);
+      }
+
+      .cls-11 {
+        stroke: #bce0fd;
+      }
+
+      .cls-12 {
+        font-size: 10px;
+      }
+
+      .cls-13 {
+        clip-path: url(#clip-path-4);
+      }
+
+      .cls-14 {
+        stroke: none;
+      }
+
+      .cls-15 {
+        fill: #f1f9ff;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" width="375" height="68"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect class="cls-1" width="16" height="16"/>
+    </clipPath>
+    <clipPath id="clip-path-3">
+      <rect class="cls-1" width="327" height="316"/>
+    </clipPath>
+    <clipPath id="clip-path-4">
+      <rect class="cls-1" width="327" height="48"/>
+    </clipPath>
+    <clipPath id="clip-_4_Sign_Up">
+      <rect width="375" height="667"/>
+    </clipPath>
+  </defs>
+  <g id="_4_Sign_Up" data-name="4 Sign Up" class="cls-2">
+    <rect class="cls-15" width="375" height="667"/>
+    <g id="Navigation_Bar" data-name="Navigation Bar" class="cls-3" transform="translate(0 0)">
+      <path id="Merged_bar" data-name="Merged bar" class="cls-4" d="M4907,1157v-48h375v48Zm0-48v-20h375v20Z" transform="translate(-4907 -1089)"/>
+      <text id="SIGN_UP" data-name="SIGN UP" class="cls-5" transform="translate(188 48)"><tspan x="-24.671" y="0">SIGN UP</tspan></text>
+      <g id="Backward_arrow" data-name="Backward arrow" class="cls-6" transform="translate(16 36)">
+        <path id="Path_10" data-name="Path 10" class="cls-7" d="M8,0,6.545,1.455l5.506,5.506H0V9.039H12.052L6.545,14.545,8,16l8-8Z" transform="translate(16 16) rotate(180)"/>
+      </g>
+    </g>
+    <g id="Login">
+      <rect id="Rectangle_127" data-name="Rectangle 127" class="cls-8" width="375" height="56" transform="translate(0 611)"/>
+      <text id="Login_as_john_doe" data-name="Login as @john_doe" class="cls-9" transform="translate(188 643)"><tspan x="-64.323" y="0">Login as @john_doe</tspan></text>
+    </g>
+    <g id="Input" class="cls-10" transform="translate(24 133)">
+      <g id="Input-2" data-name="Input" transform="translate(-48 -133)">
+        <g id="Rectangle_122" data-name="Rectangle 122" class="cls-11" transform="translate(48 152)">
+          <rect class="cls-14" width="327" height="48"/>
+          <rect class="cls-1" x="0.5" y="0.5" width="326" height="47"/>
+        </g>
+        <text id="John_Doe" data-name="John Doe" class="cls-9" transform="translate(68 181)"><tspan x="0" y="0">John Doe</tspan></text>
+        <text id="Full_Name" data-name="Full Name" class="cls-12" transform="translate(48 144)"><tspan x="0" y="0">Full Name</tspan></text>
+      </g>
+      <g id="Input-3" data-name="Input" transform="translate(-48 -50)">
+        <g id="Rectangle_122-2" data-name="Rectangle 122" class="cls-11" transform="translate(48 152)">
+          <rect class="cls-14" width="327" height="48"/>
+          <rect class="cls-1" x="0.5" y="0.5" width="326" height="47"/>
+        </g>
+        <text id="johndoe_mail.com" data-name="johndoe@mail.com" class="cls-9" transform="translate(68 181)"><tspan x="0" y="0">johndoe@mail.com</tspan></text>
+        <text id="Email" class="cls-12" transform="translate(48 144)"><tspan x="0" y="0">Email</tspan></text>
+      </g>
+      <g id="Input-4" data-name="Input" transform="translate(-48 33)">
+        <g id="Rectangle_122-3" data-name="Rectangle 122" class="cls-11" transform="translate(48 152)">
+          <rect class="cls-14" width="327" height="48"/>
+          <rect class="cls-1" x="0.5" y="0.5" width="326" height="47"/>
+        </g>
+        <text id="_" data-name="●●●●●●●" class="cls-9" transform="translate(68 181)"><tspan x="0" y="0">●●●●●●●</tspan></text>
+        <text id="Password" class="cls-12" transform="translate(48 144)"><tspan x="0" y="0">Password</tspan></text>
+      </g>
+      <g id="Input-5" data-name="Input" transform="translate(-48 116)">
+        <g id="Rectangle_122-4" data-name="Rectangle 122" class="cls-11" transform="translate(48 152)">
+          <rect class="cls-14" width="327" height="48"/>
+          <rect class="cls-1" x="0.5" y="0.5" width="326" height="47"/>
+        </g>
+        <text id="_2" data-name="●●●●●●●" class="cls-9" transform="translate(68 181)"><tspan x="0" y="0">●●●●●●●</tspan></text>
+        <text id="Confirm_Password" data-name="Confirm Password" class="cls-12" transform="translate(48 144)"><tspan x="0" y="0">Confirm Password</tspan></text>
+      </g>
+    </g>
+    <g id="Next" class="cls-13" transform="translate(24 484)">
+      <rect id="Rectangle_112" data-name="Rectangle 112" class="cls-4" width="327" height="48" rx="4"/>
+      <g id="Symbol_18_1" data-name="Symbol 18 – 1" class="cls-6" transform="translate(156 16)">
+        <path id="Path_10-2" data-name="Path 10" class="cls-7" d="M8,0,6.545,1.455l5.506,5.506H0V9.039H12.052L6.545,14.545,8,16l8-8Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

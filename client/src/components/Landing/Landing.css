@@ -1,0 +1,17 @@
+nav {
+    height: 50px;
+    background-color: #333;
+    width: 100%;
+    color: white;
+    text-align: center;
+  }
+h1 {
+  text-align: center;
+}
+ul {
+  list-style: none;
+}
+a {
+  display: flex;
+  justify-content: center;
+}

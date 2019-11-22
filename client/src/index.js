@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
+import { MarkupContextProvider } from './contexts/MarkupContext'
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { ThingListProvider } from './contexts/ThingListContext'
 // import { ThingProvider } from './contexts/ThingContext'
@@ -33,10 +34,20 @@ import './index.css'
 //   farStar,
 //   fasStar,
 // )
-
+window.addEventListener(
+  "touchmove",
+  function (event) {
+    if (event.scale !== 1) {
+      event.preventDefault();
+    }
+  },
+  { passive: false }
+);
 ReactDOM.render(
   <BrowserRouter>
+    <MarkupContextProvider>
         <App />
+    </MarkupContextProvider>
   </BrowserRouter>,
   document.getElementById('root')
 )

@@ -77,6 +77,11 @@ export class MarkupContextProvider extends Component {
       regionSize: diam
     })
   }
+
+  setRegions = (regions) => {
+    this.setState({regions})
+  }
+
   render() {
     const value = {
       image: this.state.image,
@@ -91,6 +96,7 @@ export class MarkupContextProvider extends Component {
       selectRegion: this.selectRegion,
       regionSize: this.state.regionSize,
       setRegionSize: this.setRegionSize,
+      setRegions: this.setRegions,
     }
     return (
       <MarkupContext.Provider value={value}>

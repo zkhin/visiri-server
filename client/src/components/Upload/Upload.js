@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MarkupContext from '../../contexts/MarkupContext'
 import Konva from 'konva'
 import { Stage, Layer, Image as MyImage } from 'react-konva'
+import Regions from '../Regions/Regions'
 import { Link } from 'react-router-dom'
 import './Upload.css'
 
@@ -16,7 +17,8 @@ export default class Upload extends Component {
     imageCanvas: {},
 
   }
-  stage = React.createRef()
+  stageRef = React.createRef()
+	imageLayerRef = React.createRef()
 
   handleImport = (e) => {
     let reader = new FileReader()
@@ -48,7 +50,6 @@ export default class Upload extends Component {
       stage.batchDraw();
       this.setState({ scale: newScale })
     }
-
   }
 
   getRelativePointerPosition = (node) => {
@@ -77,7 +78,9 @@ export default class Upload extends Component {
         y: pointer.y / oldScale - stage.y() / oldScale,
       };
 
-      const deltaYBounded = !(wheelEvent.deltaY % 1) ? Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) : Math.abs(wheelEvent.deltaY);
+			const deltaYBounded = !(wheelEvent.deltaY % 1) ? 
+				Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) : 
+				Math.abs(wheelEvent.deltaY);
       const scaleBy = .10 + deltaYBounded / 95;
       const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
       stage.scale({ x: newScale, y: newScale });
@@ -167,13 +170,34 @@ export default class Upload extends Component {
     }
   }
 
+  createCellRegion = (e) => {
+		let point = null
+		if (e.target.name === 'stage') {
+			point = this.getRelativePointerPosition(e.target.getStage());
+		}
+		let region = {
+				id: this.context.regions.length++,
+				color: Konva.Util.getRandomColor(),
+				regionSize: this.context.regionSize,
+		}
+		if (point){
+				region.point = [point]
+		} else {
+			region.point = [
+				this.stageRef.current.width()/2,
+				this.stageRef.current.height()/2
+			]
+			}
+    this.context.setRegions(region);
+  }
+
   updateStagePosition = (e) => {
     this.setState({ position: e.target.position() })
   }
 
   componentDidMount() {
-    this.pinchZoomWheelEvent(this.stage.current)
-    this.pinchZoomTouchEvent(this.stage.current)
+    this.pinchZoomWheelEvent(this.stageRef.current)
+    this.pinchZoomTouchEvent(this.stageRef.current)
   }
 
 
@@ -183,25 +207,27 @@ export default class Upload extends Component {
       <>
         <h2>Upload your image</h2>
         <div className="upload">
-          {/* <button onClick={(e)=>this.changeScale(e, this.stage.current, .8)}> - </button>
-          <button onClick={(e)=>this.changeScale(e, this.stage.current, 1.2)}> + </button> */}
-          {/* {this.state.uploaded && <div className="scaleBox"> test</div>} */}
-          <div id="container">
+          {/* <button onClick={(e)=>this.changeScale(e, this.stageRef.current, .8)}> - </button>
+          <button onClick={(e)=>this.changeScale(e, this.stageRef.current, 1.2)}> + </button> */}
 
+          <div id="container">
+            {this.state.uploaded && <div className="scaleBox"></div>}
             <Stage
-              ref={this.stage}
+							name="stage"
+              ref={this.stageRef}
               className="canvas"
               onDragEnd={this.updateStagePosition}
               draggable
               width={window.innerWidth}
-              height={window.innerWidth}>
-              <Layer>
-                <MyImage image={this.state.image}></MyImage>
+							height={window.innerWidth}
+						>
+              <Layer ref={this.imageLayerRef}>
+								<MyImage image={this.state.image} />
               </Layer>
             </Stage>
 
 
-            {/* <Stage ref={this.stage}
+            {/* <Stage ref={this.stageRef}
               scaleX={this.state.scale}
               scaleY={this.state.scale}
               width={this.state.image.width * this.state.scale}
@@ -212,6 +238,7 @@ export default class Upload extends Component {
             </Stage>: null} */}
 
           </div>
+					<button className="markcell" onClick={this.createCellRegion}>Mark Cell</button>
           <form className="uploadform">
             <label htmlFor="imageLoader">{this.state.uploaded? `Choose another file`: `Image File:`}</label> <br />
             <input type="file" id="imageLoader" name="imageLoader" onChange={this.handleImport}/>

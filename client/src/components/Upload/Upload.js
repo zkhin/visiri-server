@@ -19,8 +19,9 @@ export default class Upload extends Component {
 		position: {x: null, y: null},
 		scale: null,
 		debug: true,
-
+    markedLocation: {x: null, y: null},
   }
+  containerRef = React.createRef()
   stageRef = React.createRef()
 	imageLayerRef = React.createRef()
 
@@ -54,6 +55,16 @@ export default class Upload extends Component {
       stage.batchDraw();
       this.setState({ scale: newScale })
     }
+  }
+
+  getRelativeContainerCenterPosition = (node) => {
+    const transform = node.getAbsoluteTransform().copy();
+    transform.invert();
+    const pos = {
+      x: this.containerRef.current.offsetWidth / 2,
+      y: this.containerRef.current.offsetHeight / 2
+    }
+    return transform.point(pos);
   }
 
   getRelativePointerPosition = (node) => {
@@ -186,12 +197,17 @@ export default class Upload extends Component {
 		}
 		if (point){
 				region.point = [point]
-		} else {
-			region.point = [
-				this.stageRef.current.width()/2,
-				this.stageRef.current.height()/2
-			]
-			}
+    } else {
+      point = this.getRelativeContainerCenterPosition(this.stageRef.current)
+      region.point = point
+      console.log(region.point)
+    }
+    this.setState({
+      markedLocation: {
+        x: region.point.x * this.state.scale,
+        y: region.point.y * this.state.scale,
+      }
+    })
     this.context.setRegions(region);
   }
 
@@ -214,7 +230,7 @@ export default class Upload extends Component {
           {/* <button onClick={(e)=>this.changeScale(e, this.stageRef.current, .8)}> - </button>
           <button onClick={(e)=>this.changeScale(e, this.stageRef.current, 1.2)}> + </button> */}
 
-          <div id="container">
+          <div id="container" ref={this.containerRef}>
             <Stage
 							name="stage"
               ref={this.stageRef}
@@ -247,12 +263,15 @@ export default class Upload extends Component {
             </Stage>: null} */}
           </div>
 					{this.state.debug === true &&
-						<div className="debug">
+            <div className="debug">
+            <p>{`Marked Location=${this.state.markedLocation.x}, ${this.state.markedLocation.y}`}</p>
 							<p>{`position=${this.state.position.x}, ${this.state.position.y}`}</p>
 							<p>{`scaling=${this.state.scale}`}</p>
 							<p>{`window.innerWidth=${window.innerWidth}`}</p>
 							<p>{`window.innerHeight=${window.innerHeight}`}</p>
-              <p>{this.stageRef.current && `clientWidth=${this.stageRef.current.getClientRect().width}`}</p>
+            <p>{this.stageRef.current && `containerWidth=${document.getElementById('container').offsetWidth}`}</p>
+            <p>{this.stageRef.current && `containerHeight=${document.getElementById('container').offsetHeight}`}</p>
+              <p>{this.stageRef.current && `clientWidth=${this.imageLayerRef.current.getClientRect().width}`}</p>
             <p>{this.stageRef.current && `clientHeight=${this.stageRef.current.getClientRect().height}`}</p>
 						</div>
 					}

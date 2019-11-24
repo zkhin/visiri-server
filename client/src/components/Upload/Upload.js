@@ -19,7 +19,8 @@ export default class Upload extends Component {
 		position: {x: null, y: null},
 		scale: null,
 		debug: true,
-    markedLocation: {x: null, y: null},
+    markedLocation: { x: null, y: null },
+    // scaleBoxOffset: null,
   }
   containerRef = React.createRef()
   stageRef = React.createRef()
@@ -185,6 +186,10 @@ export default class Upload extends Component {
     }
   }
 
+  updateScaleBoxOffset = () => {
+    this.setState({ scaleBoxOffset: this.containerRef.current.offsetHeight / 2 })
+  }
+
   createCellRegion = (e) => {
 		let point = null
 		if (e.target.name === 'stage') {
@@ -218,6 +223,11 @@ export default class Upload extends Component {
   componentDidMount() {
     this.pinchZoomWheelEvent(this.stageRef.current)
     this.pinchZoomTouchEvent(this.stageRef.current)
+    // window.addEventListener("resize", this.updateScaleBoxOffset)
+  }
+
+  componentWillUnmount() {
+    // window.removeEventListener("resize", this.updateScaleBoxOffset)
   }
 
 
@@ -231,6 +241,9 @@ export default class Upload extends Component {
           <button onClick={(e)=>this.changeScale(e, this.stageRef.current, 1.2)}> + </button> */}
 
           <div id="container" ref={this.containerRef}>
+            {this.state.uploaded &&
+              <div className="scaleBox">test
+              </div>}
             <Stage
 							name="stage"
               ref={this.stageRef}
@@ -239,12 +252,8 @@ export default class Upload extends Component {
               draggable
 							width={window.innerWidth}
 							height={window.innerWidth}
-						>
-							{
-							/*<Portal>
-                {this.state.uploaded && <div className="scaleBox"></div>}
-							</Portal>*/
-							}
+            >
+
               <Layer ref={this.imageLayerRef}>
 								<MyImage image={this.state.image} />
               </Layer>
@@ -262,6 +271,7 @@ export default class Upload extends Component {
               </Layer>
             </Stage>: null} */}
           </div>
+          <button className="markcell" onClick={this.createCellRegion}>Mark Cell</button>
 					{this.state.debug === true &&
             <div className="debug">
             <p>{`Marked Location=${this.state.markedLocation.x}, ${this.state.markedLocation.y}`}</p>
@@ -275,7 +285,7 @@ export default class Upload extends Component {
             <p>{this.stageRef.current && `clientHeight=${this.stageRef.current.getClientRect().height}`}</p>
 						</div>
 					}
-					<button className="markcell" onClick={this.createCellRegion}>Mark Cell</button>
+
           <form className="uploadform">
             <label htmlFor="imageLoader">{this.state.uploaded? `Choose another file`: `Image File:`}</label> <br />
             <input type="file" id="imageLoader" name="imageLoader" onChange={this.handleImport}/>

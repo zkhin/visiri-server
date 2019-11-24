@@ -3,6 +3,7 @@ import MarkupContext from '../../contexts/MarkupContext'
 import Konva from 'konva'
 import { Stage, Layer, Image as MyImage } from 'react-konva'
 import Regions from '../Regions/Regions'
+import Portal from '../Portal/Portal'
 import { Link } from 'react-router-dom'
 import './Upload.css'
 
@@ -15,6 +16,9 @@ export default class Upload extends Component {
     uploaded: false,
     image: null,
     imageCanvas: {},
+		position: {x: null, y: null},
+		scale: null,
+		debug: true,
 
   }
   stageRef = React.createRef()
@@ -78,8 +82,8 @@ export default class Upload extends Component {
         y: pointer.y / oldScale - stage.y() / oldScale,
       };
 
-			const deltaYBounded = !(wheelEvent.deltaY % 1) ? 
-				Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) : 
+			const deltaYBounded = !(wheelEvent.deltaY % 1) ?
+				Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) :
 				Math.abs(wheelEvent.deltaY);
       const scaleBy = .10 + deltaYBounded / 95;
       const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
@@ -211,19 +215,24 @@ export default class Upload extends Component {
           <button onClick={(e)=>this.changeScale(e, this.stageRef.current, 1.2)}> + </button> */}
 
           <div id="container">
-            {this.state.uploaded && <div className="scaleBox"></div>}
             <Stage
 							name="stage"
               ref={this.stageRef}
               className="canvas"
               onDragEnd={this.updateStagePosition}
               draggable
-              width={window.innerWidth}
+							width={window.innerWidth}
 							height={window.innerWidth}
 						>
+							{
+							/*<Portal>
+                {this.state.uploaded && <div className="scaleBox"></div>}
+							</Portal>*/
+							}
               <Layer ref={this.imageLayerRef}>
 								<MyImage image={this.state.image} />
               </Layer>
+							{this.context.regions.length > 0 && <Regions />}
             </Stage>
 
 
@@ -236,8 +245,17 @@ export default class Upload extends Component {
                 <MyImage image={this.state.image}></MyImage>
               </Layer>
             </Stage>: null} */}
-
           </div>
+					{this.state.debug === true &&
+						<div className="debug">
+							<p>{`position=${this.state.position.x}, ${this.state.position.y}`}</p>
+							<p>{`scaling=${this.state.scale}`}</p>
+							<p>{`window.innerWidth=${window.innerWidth}`}</p>
+							<p>{`window.innerHeight=${window.innerHeight}`}</p>
+              <p>{this.stageRef.current && `clientWidth=${this.stageRef.current.getClientRect().width}`}</p>
+            <p>{this.stageRef.current && `clientHeight=${this.stageRef.current.getClientRect().height}`}</p>
+						</div>
+					}
 					<button className="markcell" onClick={this.createCellRegion}>Mark Cell</button>
           <form className="uploadform">
             <label htmlFor="imageLoader">{this.state.uploaded? `Choose another file`: `Image File:`}</label> <br />

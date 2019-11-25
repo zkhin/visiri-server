@@ -5,7 +5,7 @@ export default class RegionsList extends React.Component {
 
 	render(){
 		return (
-			<div>
+			<div className="regionslist">
 					{this.props.regions.map(region => {
 						return (
 							<button key={region.id} className="cellbutton" style={{

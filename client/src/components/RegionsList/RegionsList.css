@@ -1,10 +1,27 @@
-
+.regionslist {
+	padding: 1px;
+	border: slategray solid 1px;
+	border-radius: 8px;
+	width: 80vw;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #333;
+	box-shadow: 0 0 5px grey;
+	/* display: flex;
+	flex-basis: 50vw;
+	flex-direction: row;
+	justify-content: left;
+	align-items: flex-start; */
+}
 .cellbutton {
+	padding: 0;
 	border-radius: 100%;
-	border: cornflowerblue solid 3px;
-	background-color: lightblue;
+	border: slategray solid 3px;
+	background-color: rgb(181, 234, 255);
 	color: #333;
+	font-weight: bolder;
 	height: 30px;
 	width: 30px;
-	cursor: pointer;
+	text-align: center;
+	font-family: Inconsolata;
 }

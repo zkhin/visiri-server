@@ -46,9 +46,13 @@ h2 {
   touch-action: none;
 }
 
-.markcell {
+.finish {
+  margin-bottom: 1rem;
+}
+
+.menu {
   display: flex;
-  justify-content: center;
+  align-self: center;
 	padding: 10px;
 	border-radius: 8px;
 	color: white;

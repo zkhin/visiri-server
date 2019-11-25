@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import MarkupContext from '../../contexts/MarkupContext'
 import Konva from 'konva'
 import { Stage, Layer, Image as MyImage } from 'react-konva'
-import Regions from '../Regions/Regions'
-import Portal from '../Portal/Portal'
+import RegionsList from '../RegionsList/RegionsList'
+//import Portal from '../Portal/Portal'
 import { Link } from 'react-router-dom'
 import './Upload.css'
 
@@ -18,13 +18,14 @@ export default class Upload extends Component {
     imageCanvas: {},
 		position: {x: null, y: null},
 		scale: null,
-		debug: true,
+		debug: false,
     markedLocation: { x: null, y: null },
-    // scaleBoxOffset: null,
+    touching: false,
   }
   containerRef = React.createRef()
   stageRef = React.createRef()
-	imageLayerRef = React.createRef()
+  imageLayerRef = React.createRef()
+  regionsLayerRef = React.createRef()
 
   handleImport = (e) => {
     let reader = new FileReader()
@@ -53,73 +54,66 @@ export default class Upload extends Component {
         x: newScale,
         y: newScale
       })
-      stage.batchDraw();
+      stage.batchDraw()
       this.setState({ scale: newScale })
     }
   }
 
   getRelativeContainerCenterPosition = (node) => {
-    const transform = node.getAbsoluteTransform().copy();
-    transform.invert();
+    const transform = node.getAbsoluteTransform().copy()
+    transform.invert()
+		const container = this.containerRef.current
     const pos = {
-      x: this.containerRef.current.offsetWidth / 2,
-      y: this.containerRef.current.offsetHeight / 2
+      x: container.offsetWidth / 2,
+      y: container.offsetHeight / 2
     }
-    return transform.point(pos);
+    return transform.point(pos)
   }
 
   getRelativePointerPosition = (node) => {
-    // the function will return pointer position relative to the passed node
-    const transform = node.getAbsoluteTransform().copy();
-    // to detect relative position we need to invert transform
-    transform.invert();
-
-    // get pointer (say mouse or touch) position
-    const pos = node.getStage().getPointerPosition();
-
-    //find relative point
-    return transform.point(pos);
+    const transform = node.getAbsoluteTransform().copy()
+    transform.invert()
+    const pos = node.getStage().getPointerPosition()
+    return transform.point(pos)
   }
 
 
   pinchZoomWheelEvent(stage) {
   if (stage) {
     stage.getContent().addEventListener('wheel', (wheelEvent) => {
-      wheelEvent.preventDefault();
-      const oldScale = stage.scaleX();
+      wheelEvent.preventDefault()
+      const oldScale = stage.scaleX()
 
-      const pointer = stage.getPointerPosition();
+      const pointer = stage.getPointerPosition()
       const startPos = {
         x: pointer.x / oldScale - stage.x() / oldScale,
         y: pointer.y / oldScale - stage.y() / oldScale,
-      };
+      }
 
 			const deltaYBounded = !(wheelEvent.deltaY % 1) ?
 				Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) :
-				Math.abs(wheelEvent.deltaY);
-      const scaleBy = .10 + deltaYBounded / 95;
-      const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
-      stage.scale({ x: newScale, y: newScale });
+				Math.abs(wheelEvent.deltaY)
+      const scaleBy = .10 + deltaYBounded / 95
+      const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy
+      stage.scale({ x: newScale, y: newScale })
 
       const newPosition = {
         x: (pointer.x / newScale - startPos.x) * newScale,
         y: (pointer.y / newScale - startPos.y) * newScale,
-      };
-      stage.position(newPosition);
-      stage.batchDraw();
+      }
+      stage.position(newPosition)
+      stage.batchDraw()
       this.setState({
         ...this.state,
         position: newPosition,
         scale: newScale,
       })
-    });
+    })
     }
   }
 
-
-
   getDistance = (p1, p2) => {
-    return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
+    return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2))
   }
 
   clientPointerRelativeToStage = (clientX, clientY, stage) => {
@@ -129,60 +123,72 @@ export default class Upload extends Component {
     }
   }
 
+  dblClickTap = (stage) => {
+    if (stage) {
+      stage.addEventListener('dblclick dbltap', (evt) => {
+        if (!this.state.touching) {
+          this.createCellRegion(evt)
+        }
+      }, false)
+    }
+  }
+
   pinchZoomTouchEvent = (stage) => {
     if (stage) {
       let lastDist
       let point
       stage.getContent().addEventListener('touchmove', (evt) => {
-        const t1 = evt.touches[0];
-        const t2 = evt.touches[1];
+        const t1 = evt.touches[0]
+        const t2 = evt.touches[1]
 
         if (t1 && t2) {
-          evt.preventDefault();
-          evt.stopPropagation();
-          const oldScale = stage.scaleX();
+          evt.preventDefault()
+          evt.stopPropagation()
+          stage.removeEventListener('dblclick dbltap')
+          const oldScale = stage.scaleX()
 
           const dist = this.getDistance(
             { x: t1.clientX, y: t1.clientY },
             { x: t2.clientX, y: t2.clientY }
-          );
-          if (!lastDist) lastDist = dist;
-          const delta = dist - lastDist;
+          )
+          if (!lastDist) lastDist = dist
+          const delta = dist - lastDist
 
-          const px = (t1.clientX + t2.clientX) / 2;
-          const py = (t1.clientY + t2.clientY) / 2;
-          const pointer = point || this.clientPointerRelativeToStage(px, py, stage);
-          if (!point) point = pointer;
+          const px = (t1.clientX + t2.clientX) / 2
+          const py = (t1.clientY + t2.clientY) / 2
+          const pointer = point || this.clientPointerRelativeToStage(px, py, stage)
+          if (!point) point = pointer
 
           const startPos = {
             x: pointer.x / oldScale - stage.x() / oldScale,
             y: pointer.y / oldScale - stage.y() / oldScale,
-          };
+          }
 
-          const scaleBy = 1.01 + Math.abs(delta) / 100;
-          const newScale = delta < 0 ? oldScale / scaleBy : oldScale * scaleBy;
-          stage.scale({ x: newScale, y: newScale });
+          const scaleBy = 1.01 + Math.abs(delta) / 100
+          const newScale = delta < 0 ? oldScale / scaleBy : oldScale * scaleBy
+          stage.scale({ x: newScale, y: newScale })
 
           const newPosition = {
             x: (pointer.x / newScale - startPos.x) * newScale,
             y: (pointer.y / newScale - startPos.y) * newScale,
-          };
+          }
 
-          stage.position(newPosition);
-          stage.batchDraw();
-          lastDist = dist;
+          stage.position(newPosition)
+          stage.batchDraw()
+          lastDist = dist
           this.setState({
             ...this.state,
             position: newPosition,
             scale: newScale,
           })
+          this.dblClickTap(stage)
         }
-      }, false);
+      }, false)
 
       stage.getContent().addEventListener('touchend', () => {
-        lastDist = 0;
-        point = undefined;
-      }, false);
+        lastDist = 0
+        point = undefined
+      }, false)
     }
   }
 
@@ -190,13 +196,28 @@ export default class Upload extends Component {
     this.setState({ scaleBoxOffset: this.containerRef.current.offsetHeight / 2 })
   }
 
+  renderCellRegion = (region) => {
+    const layer = this.regionsLayerRef.current
+    let box = new Konva.Rect({
+      width: region.regionSize / this.state.scale,
+      height: region.regionSize / this.state.scale,
+      x: region.point.x - region.regionSize / this.state.scale / 2,
+      y: (region.point.y - region.regionSize / this.state.scale / 2),
+      fill: "transparent",
+      strokeWidth: 3 / this.state.scale,
+      stroke: region.color,
+    })
+    layer.add(box)
+    layer.batchDraw()
+  }
+
   createCellRegion = (e) => {
 		let point = null
 		if (e.target.name === 'stage') {
-			point = this.getRelativePointerPosition(e.target.getStage());
+			point = this.getRelativePointerPosition(e.target.getStage())
 		}
 		let region = {
-				id: this.context.regions.length++,
+				id: this.context.regions.length+1,
 				color: Konva.Util.getRandomColor(),
 				regionSize: this.context.regionSize,
 		}
@@ -213,7 +234,8 @@ export default class Upload extends Component {
         y: region.point.y * this.state.scale,
       }
     })
-    this.context.setRegions(region);
+    this.context.setRegions(this.context.regions.concat(region))
+    this.renderCellRegion(region)
   }
 
   updateStagePosition = (e) => {
@@ -223,7 +245,7 @@ export default class Upload extends Component {
   componentDidMount() {
     this.pinchZoomWheelEvent(this.stageRef.current)
     this.pinchZoomTouchEvent(this.stageRef.current)
-    // window.addEventListener("resize", this.updateScaleBoxOffset)
+    this.dblClickTap(this.stageRef.current)
   }
 
   componentWillUnmount() {
@@ -235,17 +257,15 @@ export default class Upload extends Component {
   render() {
     return (
       <>
-        <h2>Upload your image</h2>
+			{!this.state.image && <h2>Upload your image</h2>}
         <div className="upload">
-          {/* <button onClick={(e)=>this.changeScale(e, this.stageRef.current, .8)}> - </button>
-          <button onClick={(e)=>this.changeScale(e, this.stageRef.current, 1.2)}> + </button> */}
-
           <div id="container" ref={this.containerRef}>
             {this.state.uploaded &&
-              <div className="scaleBox">test
+              <div className="scaleBox">
               </div>}
-            <Stage
+						<Stage
 							name="stage"
+							container="container"
               ref={this.stageRef}
               className="canvas"
               onDragEnd={this.updateStagePosition}
@@ -257,21 +277,15 @@ export default class Upload extends Component {
               <Layer ref={this.imageLayerRef}>
 								<MyImage image={this.state.image} />
               </Layer>
-							{this.context.regions.length > 0 && <Regions />}
-            </Stage>
-
-
-            {/* <Stage ref={this.stageRef}
-              scaleX={this.state.scale}
-              scaleY={this.state.scale}
-              width={this.state.image.width * this.state.scale}
-              height={this.state.image.width * this.state.scale}>
-              <Layer>
-                <MyImage image={this.state.image}></MyImage>
+              <Layer ref={this.regionsLayerRef}>
               </Layer>
-            </Stage>: null} */}
+            </Stage>
           </div>
           <button className="markcell" onClick={this.createCellRegion}>Mark Cell</button>
+
+					{this.context.regions.length >= 1 &&
+							<RegionsList regions={this.context.regions} />}
+
 					{this.state.debug === true &&
             <div className="debug">
             <p>{`Marked Location=${this.state.markedLocation.x}, ${this.state.markedLocation.y}`}</p>

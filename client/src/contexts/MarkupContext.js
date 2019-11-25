@@ -47,12 +47,24 @@ export class MarkupContextProvider extends Component {
     regions: [],
     selectedRegionId: null,
     selectRegion: this.selectRegion,
-    regionSize: 28,
+    regionSize: 56,
     setRegionSize: this.setRegionSize,
     // setImage: () => {},
     // setExperiment: (name, type) => { },
     // setDiameter: () => { },
   }
+
+  getRegionById = (regionId) => {
+    return this.state.regions.find(region => region.id === regionId)
+  }
+
+  deleteRegionById = (id) => {
+    let toRemove = this.getRegionById(id)
+    this.setState({
+      regions: this.state.regions.filter(region => region !== toRemove)
+    })
+  }
+
   selectRegion = (selectedRegionId) => this.setState({selectedRegionId})
 
   setImageSrc = (src) => {
@@ -78,8 +90,8 @@ export class MarkupContextProvider extends Component {
     })
   }
 
-  setRegions = (regions) => {
-    this.setState({regions})
+  setRegions = (newRegions) => {
+    this.setState({regions: newRegions})
   }
 
   render() {

@@ -1,0 +1,10 @@
+
+.cellbutton {
+	border-radius: 100%;
+	border: cornflowerblue solid 3px;
+	background-color: lightblue;
+	color: #333;
+	height: 30px;
+	width: 30px;
+	cursor: pointer;
+}

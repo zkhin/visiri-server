@@ -207,31 +207,53 @@ export default class Upload extends Component {
 
   renderCellRegion = (region) => {
     const layer = this.regionsLayerRef.current
-    let box = new Konva.RegularPolygon({
+    let box1 = new Konva.RegularPolygon({
       name: `region${region.id}`,
       // width: region.regionSize / this.state.scale,
       // height: region.regionSize / this.state.scale,
-      sides: 6,
+      sides: 4,
       radius: region.regionSize / this.state.scale / 2,
+      rotationDeg: 45,
       x: region.point.x,
       y: region.point.y,
       // x: region.point.x - region.regionSize / this.state.scale / 2,
       // y: (region.point.y - region.regionSize / this.state.scale / 2),
       fill: "transparent",
-      strokeWidth: 3 / this.state.scale,
+      strokeWidth: 4 / this.state.scale,
       stroke: region.color,
     })
-    layer.add(box)
-    box.tween = new Konva.Tween({
-      node: box,
+    let box2 = new Konva.RegularPolygon({
+      name: `region${region.id}-2`,
+      sides: 4,
+      radius: region.regionSize / this.state.scale / 2,
+      rotationDeg: 45,
+      x: region.point.x,
+      y: region.point.y,
+      fill: "transparent",
+      strokeWidth: 1 / this.state.scale,
+      stroke: "white",
+    })
+    layer.add(box1)
+    layer.add(box2)
+    box1.tween = new Konva.Tween({
+      node: box1,
+      scaleX: 1.3,
+      scaleY: 1.3,
+      easing: Konva.Easings.EaseInOut,
+      duration: .3,
+      onFinish: ()=>box1.tween.reverse()
+    })
+    box2.tween = new Konva.Tween({
+      node: box2,
       scaleX: 1.2,
       scaleY: 1.2,
       easing: Konva.Easings.EaseInOut,
       duration: .2,
-      onFinish: ()=>box.tween.reverse()
+      onFinish: () => box2.tween.reverse()
     })
     layer.draw()
-    box.tween.play()
+    box1.tween.play()
+    box2.tween.play()
     // layer.batchDraw()
   }
 

@@ -1,6 +1,6 @@
-CREATE TABLE experiment (
+CREATE TABLE experiments (
 	id SERIAL PRIMARY KEY,
-	image TEXT,
 	celltype TEXT NOT NULL,
+	experiment_type TEXT NOT NULL DEFAULT "Calibration"
 	date_created TIMESTAMP DEFAULT now() NOT NULL
 );

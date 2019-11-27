@@ -10,5 +10,5 @@ CREATE TABLE visiri_users (
 
 ALTER TABLE experiments
   ADD COLUMN
-    user_id INTEGER REFERENCES visiri_users(id)
+    user INTEGER REFERENCES visiri_users(id)
     ON DELETE SET NULL;

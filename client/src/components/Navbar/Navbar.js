@@ -5,7 +5,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <div>
-        <nav>Navbar</nav>
+        <nav className="nav">Navbar</nav>
       </div>
     )
   }

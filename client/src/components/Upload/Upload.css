@@ -3,7 +3,7 @@ h2 {
 }
 
 body {
-  background-color: #333;
+  background-color: white;
 }
 
 .image {
@@ -15,7 +15,7 @@ body {
   text-align: center;
   height: 300px;
   width: 300px;
-  background-color: black;
+  background-color: #DEEEFF;
 }
 
 .info {
@@ -60,7 +60,7 @@ body {
 	padding: 10px;
 	border-radius: 8px;
 	color: white;
-	background-color: #333;
+	background-color: #6F7780;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -85,7 +85,7 @@ body {
   border: 1px solid slategray;
   border-radius: 2px;
   padding-top: 8px;
-  background-color: white;
+  background-color: #DEEEFF;
   width: 95vw;
 }
 
@@ -99,7 +99,7 @@ body {
   align-items: center;
   height: 50vh;
   width: 85vw;
-  background-color: black;
+  background-color: #333;
   text-align: center;
   overflow: hidden;
   box-shadow: 0 0 5px grey;

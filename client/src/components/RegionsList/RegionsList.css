@@ -5,7 +5,7 @@
 	width: 80vw;
 	margin-left: auto;
 	margin-right: auto;
-	background-color: #333;
+	background-color: #6F7780;
 	box-shadow: 0 0 5px grey;
 	/* display: flex;
 	flex-basis: 50vw;
@@ -17,8 +17,8 @@
 	padding: 0;
 	border-radius: 100%;
 	border: slategray solid 3px;
-	background-color: rgb(181, 234, 255);
-	color: #333;
+	background-color: #DEEEFF;
+	color: #6F7780;
 	font-weight: bolder;
 	height: 30px;
 	width: 30px;

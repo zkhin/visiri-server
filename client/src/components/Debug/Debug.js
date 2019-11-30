@@ -8,7 +8,7 @@ export default class Debug extends Component {
       <div>
         <div className="debug">
           <p>{`Marked Location=${this.props.stateProp.markedLocation.x}, ${this.props.stateProp.markedLocation.y}`}</p>
-          <p>{`position=${this.props.position.x}, ${this.props.stateProp.position.y}`}</p>
+          {/* <p>{`position=${this.props.position.x}, ${this.props.stateProp.position.y}`}</p> */}
           <p>{`scaling=${this.props.stateProp.scale}`}</p>
           <p>{`window.innerWidth=${window.innerWidth}`}</p>
           <p>{`window.innerHeight=${window.innerHeight}`}</p>

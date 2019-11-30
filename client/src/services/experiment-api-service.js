@@ -14,6 +14,7 @@ const ExperimentApiService = {
           : res.json()
       )
   },
+
   getExperiment(experimentId) {
     return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}`, {
       headers: {
@@ -38,15 +39,28 @@ const ExperimentApiService = {
           : res.json()
       )
   },
+
+	postExperiment(experiment) {
+		return fetch(`${config.API_ENDPOINT}/experiments`, {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json',
+				'authorization': `bearer ${TokenService.getAuthToken()}`
+			},
+			body: JSON.stringify({
+
+			})
+		})
+	}
   postRegions(experimentId, regions) {
-    return fetch(`${config.API_ENDPOINT}/reviews`, {
+    return fetch(`${config.API_ENDPOINT}/regions`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },
       body: JSON.stringify({
-        thing_id: thingId,
+        experiment_id: experimentId,
         regions,
       }),
     })

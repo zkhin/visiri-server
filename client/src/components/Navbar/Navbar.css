@@ -1,6 +1,10 @@
+h1 {
+  color: white;
+  text-align: center;
+}
 .nav {
   height: 50px;
-  background-color: #496480;
+  background-color: #0B4780;
   width: 100%;
   color: white;
   text-align: center;

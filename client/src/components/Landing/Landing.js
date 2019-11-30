@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import './Landing.css'
 
 export default class Landing extends Component {
   render() {
     return (
       <>
-        <h1>Visiri Landing Page</h1>
         <section>
+          <img className="splash" src="/Completed 2.jpg"></img>
           <ul>
             <li>
               Take a picture of the cells you want to count.
@@ -21,7 +22,7 @@ export default class Landing extends Component {
               When you are done, click Finished to save and upload the data to your collection of experiments.
             </li>
           </ul>
-          <a href="#">Continue</a>
+          <Link to="/upload">Continue</Link>
         </section>
       </>
     )

@@ -4,7 +4,6 @@ import Konva from 'konva'
 import { Stage, Layer, Image as MyImage } from 'react-konva'
 import RegionsList from '../RegionsList/RegionsList'
 import Debug from '../Debug/Debug'
-//import Portal from '../Portal/Portal'
 import { Link } from 'react-router-dom'
 import './Upload.css'
 
@@ -27,6 +26,22 @@ export default class Upload extends Component {
   stageRef = React.createRef()
   imageLayerRef = React.createRef()
   regionsLayerRef = React.createRef()
+
+  handleDemo = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    let img = new Image()
+    img.onload = () => {
+      this.context.setImageSrc(img.src)
+      this.context.setRegions([])
+      this.setState({
+        uploaded: true,
+        image: img,
+        scale: 1,
+      })
+    }
+    img.src = this.context.image.src
+  }
 
   handleImport = (e) => {
     let reader = new FileReader()
@@ -205,57 +220,7 @@ export default class Upload extends Component {
     this.setState({ scaleBoxOffset: this.containerRef.current.offsetHeight / 2 })
   }
 
-  renderCellRegion = (region) => {
-    const layer = this.regionsLayerRef.current
-    let box1 = new Konva.RegularPolygon({
-      name: `region${region.id}`,
-      // width: region.regionSize / this.state.scale,
-      // height: region.regionSize / this.state.scale,
-      sides: 4,
-      radius: (region.regionSize / this.state.scale) / 2,
-      rotation: 45,
-      x: region.point.x,
-      y: region.point.y,
-      // x: region.point.x - region.regionSize / this.state.scale / 2,
-      // y: (region.point.y - region.regionSize / this.state.scale / 2),
-      fill: "transparent",
-      strokeWidth: 4 / this.state.scale,
-      stroke: region.color,
-    })
-    let box2 = new Konva.RegularPolygon({
-      name: `region${region.id}-2`,
-      sides: 4,
-      radius: (region.regionSize / this.state.scale) / 2,
-      rotation: 45,
-      x: region.point.x,
-      y: region.point.y,
-      fill: "transparent",
-      strokeWidth: 1 / this.state.scale,
-      stroke: "white",
-    })
-    layer.add(box1)
-    layer.add(box2)
-    box1.tween = new Konva.Tween({
-      node: box1,
-      scaleX: 1.3,
-      scaleY: 1.3,
-      easing: Konva.Easings.EaseInOut,
-      duration: .3,
-      onFinish: ()=>box1.tween.reverse()
-    })
-    box2.tween = new Konva.Tween({
-      node: box2,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      easing: Konva.Easings.EaseInOut,
-      duration: .2,
-      onFinish: () => box2.tween.reverse()
-    })
-    layer.draw()
-    box1.tween.play()
-    box2.tween.play()
-    // layer.batchDraw()
-  }
+
 
   createCellRegion = (e) => {
 		let point = null
@@ -265,7 +230,7 @@ export default class Upload extends Component {
 		let region = {
 				id: this.context.regions.length+1,
 				color: Konva.Util.getRandomColor(),
-				regionSize: this.context.regionSize,
+				regionSize: this.context.regionSize / this.state.scale,
 		}
 		if (point){
 				region.point = [point]
@@ -294,21 +259,84 @@ export default class Upload extends Component {
     this.dblClickTap(this.stageRef.current)
   }
 
-  componentWillUnmount() {
-    // window.removeEventListener("resize", this.updateScaleBoxOffset)
+  renderCellRegion = (region) => {
+    const layer = this.regionsLayerRef.current
+    let box1 = new Konva.RegularPolygon({
+      name: `region${region.id}`,
+      sides: 4,
+      radius: region.regionSize / 2,
+      rotation: 45,
+      x: region.point.x,
+      y: region.point.y,
+      // x: region.point.x - region.regionSize / this.state.scale / 2,
+      // y: (region.point.y - region.regionSize / this.state.scale / 2),
+      fill: "transparent",
+      strokeWidth: 4 / this.state.scale,
+      stroke: region.color,
+    })
+    let box2 = new Konva.RegularPolygon({
+      name: `region${region.id}-2`,
+      sides: 4,
+      // radius: (region.regionSize / this.state.scale) / 2,
+      radius: region.regionSize / 2,
+      rotation: 45,
+      x: region.point.x,
+      y: region.point.y,
+      fill: "transparent",
+      strokeWidth: 1 / this.state.scale,
+      stroke: "white",
+    })
+    layer.add(box1)
+    layer.add(box2)
+    box1.tween = new Konva.Tween({
+      node: box1,
+      scaleX: 1.3,
+      scaleY: 1.3,
+      easing: Konva.Easings.EaseInOut,
+      duration: .3,
+      onFinish: () => box1.tween.reverse()
+    })
+    box2.tween = new Konva.Tween({
+      node: box2,
+      scaleX: 1.2,
+      scaleY: 1.2,
+      easing: Konva.Easings.EaseInOut,
+      duration: .2,
+      onFinish: () => box2.tween.reverse()
+    })
+    box1.draw()
+    box2.draw()
+    box1.tween.play()
+    box2.tween.play()
+    // layer.batchDraw()
   }
-
 
 
   render() {
     return (
       <>
-			{!this.state.image && <h2>Upload your image</h2>}
+        {!this.state.image &&
+          <>
+          <h2>Upload your image</h2>
+          <h5>Or use <a href="#" onClick={this.handleDemo}>Sample Image</a></h5>
+          </>
+          }
         <div className="upload">
           <div id="container" ref={this.containerRef}>
+            {this.state.debug === true &&
+              <Debug className="debug" stateProp={this.state} imageLayerRef={this.imageLayerRef} stageRef={this.stageRef} />
+            }
+            {!this.state.uploaded &&
+              <form className="uploadform">
+                <div className="uploadform">
+                  <input className="menu file" type="file" id="imageLoader" name="imageLoader" onChange={this.handleImport} />
+                </div>
+              </form>
+            }
             {this.state.uploaded &&
               <div className="scaleBox">
-              </div>}
+              </div>
+            }
 						<Stage
 							name="stage"
 							container="container"
@@ -328,19 +356,13 @@ export default class Upload extends Component {
             </Stage>
           </div>
           <button className="menu" onClick={this.createCellRegion}>Mark Cell</button>
+          {/* <button className="menu" onClick={()=>{this.setState({debug: !this.state.debug})}}>Debug</button> */}
 
-					{this.context.regions.length >= 1 &&
-							<RegionsList regions={this.context.regions} />}
-
-					{this.state.debug === true &&
-            <Debug stateProp={this.state} imageLayerRef={this.imageLayerRef} stageRef={this.stageRef} />
-					}
-
-          <form className="uploadform">
-            {/* <label htmlFor="imageLoader">{this.state.uploaded? `Choose another file`: `Image File:`}</label> <br /> */}
-            <input className="menu" type="file" id="imageLoader" name="imageLoader" onChange={this.handleImport}/>
-            <Link to='/create'><button className="menu finish">Finish Calibration</button></Link>
-          </form>
+          {this.context.regions.length >= 1 &&
+            <>
+            <RegionsList regions={this.context.regions} />
+            <Link to='/create'><button className="menu finish">Finish Calibration</button></Link></>
+            }
         </div>
       </>
     )

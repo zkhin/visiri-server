@@ -4,7 +4,7 @@ const { requireAuth } = require('../middleware/jwt-auth')
 
 const experimentsRouter = express.Router()
 
-experimentsRouter.route('/experiments')
+experimentsRouter.route('/')
   .get((req, res, next) => {
     ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user)
       .then(experiments => {
@@ -13,14 +13,14 @@ experimentsRouter.route('/experiments')
       .catch(next)
   })
 
-experimentsRouter.route('/experiments/:experiment_id')
+experimentsRouter.route('/:experiment_id')
   .all(requireAuth)
   .all(checkExperimentExists)
   .get((req, res) => {
     res.json(ExperimentsService.serializeExperiment(res.experiment))
   })
 
-experimentsRouter.route('/experiments/:experiment_id/regions')
+experimentsRouter.route('/:experiment_id/regions')
   .all(requireAuth)
   .all(checkExperimentExists)
   .get((req, res, next) => {

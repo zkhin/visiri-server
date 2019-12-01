@@ -4,8 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const thingsRouter = require('./things/things-router')
-const reviewsRouter = require('./reviews/reviews-router')
+const experimentsRouter = require('./experiments/experiments-router')
 const authRouter = require('./auth/auth-router')
 
 const app = express()
@@ -20,8 +19,7 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
 app.use(cors())
 app.use(helmet())
 
-app.use('/api/experiments', thingsRouter)
-app.use('/api/images', reviewsRouter)
+app.use('/api/experiments', experimentsRouter)
 app.use('/api/auth', authRouter)
 
 app.use(function errorHandler(error, req, res, next) {

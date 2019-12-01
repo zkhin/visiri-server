@@ -1,7 +1,7 @@
 BEGIN;
 
 TRUNCATE
-  experiment,
+  experiments,
   visiri_users,
   experiment_regions
   RESTART IDENTITY CASCADE;
@@ -17,4 +17,4 @@ VALUES
 
 INSERT INTO experiment_regions (experiment_id, regions)
 VALUES
-	(1, '[{point: {x: 2, y: 2}, regionSize: 42},{point: {x: 2, y: 2}, regionSize: 42}]')
+	(1, '[{point: {x: 2, y: 2}, regionSize: 42},{point: {x: 2, y: 2}, regionSize: 42}]');

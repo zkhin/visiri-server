@@ -1,53 +1,53 @@
 const express = require('express')
-const ThingsService = require('./things-service')
+const ExperimentsService = require('./experiments-service')
 const { requireAuth } = require('../middleware/jwt-auth')
 
-const thingsRouter = express.Router()
+const experimentsRouter = express.Router()
 
-thingsRouter.route('/')
+experimentsRouter.route('/experiments')
   .get((req, res, next) => {
-    ThingsService.getAllThings(req.app.get('db'))
-      .then(things => {
-        res.json(ThingsService.serializeThings(things))
+    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user)
+      .then(experiments => {
+        res.json(ExperimentsService.serializeExperiments(experiments))
       })
       .catch(next)
   })
 
-thingsRouter.route('/:thing_id')
+experimentsRouter.route('/experiments/:experiment_id')
   .all(requireAuth)
-  .all(checkThingExists)
+  .all(checkExperimentExists)
   .get((req, res) => {
-    res.json(ThingsService.serializeThing(res.thing))
+    res.json(ExperimentsService.serializeExperiment(res.experiment))
   })
 
-thingsRouter.route('/:thing_id/reviews/')
+experimentsRouter.route('/experiments/:experiment_id/regions')
   .all(requireAuth)
-  .all(checkThingExists)
+  .all(checkExperimentExists)
   .get((req, res, next) => {
-    ThingsService.getReviewsForThing(
+    ExperimentsService.getRegionsForExperiment(
       req.app.get('db'),
-      req.params.thing_id
+      req.params.experiment_id
     )
-      .then(reviews => {
-        res.json(ThingsService.serializeThingReviews(reviews))
+      .then(regions => {
+        res.json(ExperimentsService.serializeExperimentRegions(regions))
       })
       .catch(next)
   })
 
 /* async/await syntax for promises */
-async function checkThingExists(req, res, next) {
+async function checkExperimentExists(req, res, next) {
   try {
-    const thing = await ThingsService.getById(
+    const experiment = await ExperimentsService.getById(
       req.app.get('db'),
-      req.params.thing_id
+      req.params.experiment_id
     )
 
-    if (!thing)
+    if (!experiment)
       return res.status(404).json({
-        error: `Thing doesn't exist`
+        error: `Experiment doesn't exist`
       })
 
-    res.thing = thing
+    res.experiment = experiment
     next()
   } catch (error) {
     next(error)

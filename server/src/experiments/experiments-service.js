@@ -2,9 +2,8 @@ const xss = require('xss')
 const Treeize = require('treeize')
 
 const ExperimentsService = {
-  getAllExperiments(db) {
-    return db
-      .from('experiments AS exp')
+  getAllUserExperiments(db, username) {
+		return db.from('experiments AS exp')
       .select(
         'exp.id',
         'exp.celltype',
@@ -18,31 +17,43 @@ const ExperimentsService = {
       .leftJoin(
         'experiment_regions AS reg',
         'exp.id',
-        'reg.experiment',
+        'reg.experiment_id',
       )
       .leftJoin(
         'visiri_users AS usr',
-        'exp.user',
+        'exp.user_id',
         'usr.id',
       )
       .groupBy('exp.id', 'usr.id')
+			.where('usr.user_name', username)
   },
 
-  getById(db, id) {
-    return ExperimentsService.getAllExperiments(db)
-      .where('exp.id', id)
+  getById(db, id, username) {
+    return ExperimentsService.getAllUserExperiments(db, username)
+      .andWhere('exp.id', id)
       .first()
   },
 
-  getRegionsForExperiment(db, experiment_id) {
+  getRegionsForExperiment(db, experiment_id, username) {
     return db
       .from('experiment_regions AS reg')
       .select(
         'reg.id',
         'reg.regions',
         'reg.date_created',
+				'reg.experiment_id',
       )
-      .where('reg.experiment', experiment_id)
+			.leftJoin(
+				'experiments as exp',
+				'reg.experiment_id',
+				'exp.id',
+			)
+			.leftJoin(
+				'visiri_users as usr',
+				'exp.user_id',
+				'usr.id',
+			)
+      .where('usr.user_name', username)
   },
 
   serializeExperiments(experiments) {
@@ -65,7 +76,7 @@ const ExperimentsService = {
       image_url: experimentData.image_url,
       image_width: experimentData.image_width,
       image_height: experimentData.image_height,
-      user: experimentData.user || {},
+      user_id: experimentData.user_id || {},
     }
   },
 
@@ -73,7 +84,7 @@ const ExperimentsService = {
     return regions.map(this.serializeExperimentRegion)
   },
 
-  serializeThingReview(region) {
+  serializeExperimentRegion(region) {
     const regionTree = new Treeize()
 
     // Some light hackiness to allow for the fact that `treeize`
@@ -83,10 +94,9 @@ const ExperimentsService = {
 
     return {
       id: regionData.id,
-      rating: reviewData.rating,
-      experiment: regionData.experiment,
-      regions: xss(regionData.regions),
       date_created: regionData.date_created,
+      experiment_id: regionData.experiment_id,
+      regions: regionData.regions,
     }
   },
 }

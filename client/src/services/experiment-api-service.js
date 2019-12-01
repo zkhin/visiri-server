@@ -48,12 +48,17 @@ const ExperimentApiService = {
 				'authorization': `bearer ${TokenService.getAuthToken()}`
 			},
 			body: JSON.stringify({
-
+				celltype: experiment.celltype,
+				experiment_type: experiment.experiment_type,
+				image_url: experiment.image_url,
+				image_width: experiment.image_width,
+				image_height: experiment.image_height,
+				user_id: experiment.user_id,
 			})
 		})
-	}
+	},
   postRegions(experimentId, regions) {
-    return fetch(`${config.API_ENDPOINT}/regions`, {
+		return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -62,7 +67,7 @@ const ExperimentApiService = {
       body: JSON.stringify({
         experiment_id: experimentId,
         regions,
-      }),
+      })
     })
       .then(res =>
         (!res.ok)

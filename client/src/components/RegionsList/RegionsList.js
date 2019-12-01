@@ -3,7 +3,7 @@ import './RegionsList.css'
 
 export default class RegionsList extends React.Component {
 
-	render(){
+	render() {
 		return (
 			<div className="regionslist">
 					{this.props.regions.map(region => {

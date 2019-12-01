@@ -25,4 +25,7 @@ li {
   margin-left: auto;
   margin-right: auto;
   width: 435px;
+  border-radius: 8px;
+  margin-top: 2rem;
+  box-shadow: 0 0 5px grey;
 }

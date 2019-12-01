@@ -7,6 +7,8 @@
 	margin-right: auto;
 	background-color: #DCEBEC;
 	box-shadow: 0 0 5px grey;
+	min-height: 35px;
+	max-width: 304px;
 	/* display: flex;
 	flex-basis: 50vw;
 	flex-direction: row;

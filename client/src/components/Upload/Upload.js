@@ -32,7 +32,7 @@ export default class Upload extends Component {
     e.stopPropagation()
     let img = new Image()
     img.onload = () => {
-      this.context.setImageSrc(img.src)
+      this.context.setImage(img.src, img.width, img.height)
       this.context.setRegions([])
       this.setState({
         uploaded: true,
@@ -48,7 +48,7 @@ export default class Upload extends Component {
     reader.onload = (event) => {
       let img = new Image()
       img.onload = () => {
-        this.context.setImageSrc(img.src)
+        this.context.setImage(img.src, img.width, img.height)
         this.context.setRegions([])
         this.setState({
           uploaded: true,
@@ -358,11 +358,11 @@ export default class Upload extends Component {
           <button className="menu" onClick={this.createCellRegion}>Mark Cell</button>
           {/* <button className="menu" onClick={()=>{this.setState({debug: !this.state.debug})}}>Debug</button> */}
 
-          {this.context.regions.length >= 1 &&
+          {/* {this.context.regions.length >= 1 && */}
             <>
             <RegionsList regions={this.context.regions} />
             <Link to='/create'><button className="menu finish">Finish Calibration</button></Link></>
-            }
+            {/* } */}
         </div>
       </>
     )

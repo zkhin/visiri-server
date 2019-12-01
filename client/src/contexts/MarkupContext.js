@@ -67,10 +67,13 @@ export class MarkupContextProvider extends Component {
 
   selectRegion = (selectedRegionId) => this.setState({selectedRegionId})
 
-  setImageSrc = (src) => {
+
+  setImage = (src, width, height) => {
     this.setState({
       image: {
-        src: src
+        src,
+        width,
+        height
       }
     })
   }
@@ -97,7 +100,7 @@ export class MarkupContextProvider extends Component {
   render() {
     const value = {
       image: this.state.image,
-      setImageSrc: this.setImageSrc,
+      setImage: this.setImage,
       experimentName: this.state.experimentName,
       experimentType: this.state.experimentType,
       cellType: this.state.cellType,

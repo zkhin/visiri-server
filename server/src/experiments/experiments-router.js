@@ -1,6 +1,7 @@
 const express = require('express')
 const ExperimentsService = require('./experiments-service')
 const RegionsService = require('../regions/regions-service')
+const ImagesService = require('../images/images-service')
 const { requireAuth } = require('../middleware/jwt-auth')
 const jsonBodyParser = express.json()
 
@@ -9,7 +10,7 @@ const experimentsRouter = express.Router()
 experimentsRouter.route('/')
   .all(requireAuth)
   .post(jsonBodyParser, (req, res, next) => {
-    let { celltype, experimenttype } = req.body
+    let { celltype, experiment_type } = req.body
     let newExperiment = {
       celltype,
       experiment_type,

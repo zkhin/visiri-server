@@ -9,9 +9,6 @@ const ExperimentsService = {
         'exp.celltype',
         'exp.date_created',
         'exp.experiment_type',
-        'exp.image_url',
-        'exp.image_width',
-        'exp.image_height',
         ...userFields,
       )
       .leftJoin(
@@ -64,9 +61,6 @@ const ExperimentsService = {
       celltype: xss(experimentData.celltype),
       experiment_type: xss(experimentData.experiment_type),
       date_created: experimentData.date_created,
-      image_url: experimentData.image_url,
-      image_width: experimentData.image_width,
-      image_height: experimentData.image_height,
       user_id: experimentData.user_id || {},
     }
   },

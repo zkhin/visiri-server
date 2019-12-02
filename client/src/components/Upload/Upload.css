@@ -3,13 +3,20 @@
 }
 
 h2 {
-  color: #333;
+  color: #f2f2f2;
   text-align: center;
+  font-family: 'Open Sans';
+}
+
+a {
+  text-decoration: none;
+  color: #f2f2f2;
+  font-size: larger;
 }
 
 h5 {
   text-align: center;
-  color: #333;
+  color: #f2f2f2;
 }
 
 body {
@@ -110,11 +117,14 @@ input.file {
   align-self: center;
 	padding: 10px;
 	border-radius: 8px;
-	color: white;
-  background-color: #0B4780;
-  border: 3px solid white;
+	color: #0d4387;
+  background-color: #ffffff;
+  border: 1px solid #82b9ff;
 	margin-left: auto;
-	margin-right: auto;
+  margin-right: auto;
+  margin-top: 5px;
+  font-size: larger;
+  font-weight: 500;
 }
 
 

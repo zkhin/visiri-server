@@ -1,12 +1,28 @@
 const express = require('express')
 const ExperimentsService = require('./experiments-service')
+const RegionsService = require('../regions/regions-service')
 const { requireAuth } = require('../middleware/jwt-auth')
+const jsonBodyParser = express.json()
 
 const experimentsRouter = express.Router()
 
 experimentsRouter.route('/')
+  .all(requireAuth)
+  .post(jsonBodyParser, (req, res, next) => {
+    let { celltype, experimenttype } = req.body
+    let newExperiment = {
+      celltype,
+      experiment_type,
+      user_id: req.user.user_id
+    }
+    ExperimentsService.insertExperiment(
+      req.app.get('db'),
+      req.user.user_name,
+      newExperiment
+    )
+  })
   .get((req, res, next) => {
-    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user)
+    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user.user_name)
       .then(experiments => {
         res.json(ExperimentsService.serializeExperiments(experiments))
       })
@@ -24,12 +40,12 @@ experimentsRouter.route('/:experiment_id/regions')
   .all(requireAuth)
   .all(checkExperimentExists)
   .get((req, res, next) => {
-    ExperimentsService.getRegionsForExperiment(
+    RegionsService.getRegionsForExperiment(
       req.app.get('db'),
       req.params.experiment_id
     )
       .then(regions => {
-        res.json(ExperimentsService.serializeExperimentRegions(regions))
+        res.json(RegionsService.serializeExperimentRegions(regions))
       })
       .catch(next)
   })
@@ -37,8 +53,9 @@ experimentsRouter.route('/:experiment_id/regions')
 /* async/await syntax for promises */
 async function checkExperimentExists(req, res, next) {
   try {
-    const experiment = await ExperimentsService.getById(
+    const experiment = await ExperimentsService.getByUserAndId(
       req.app.get('db'),
+      req.user.user_name,
       req.params.experiment_id
     )
 

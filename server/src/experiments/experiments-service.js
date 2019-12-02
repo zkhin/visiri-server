@@ -28,32 +28,23 @@ const ExperimentsService = {
 			.where('usr.user_name', username)
   },
 
-  getById(db, id, username) {
+  getByUserAndId(db, username, id) {
     return ExperimentsService.getAllUserExperiments(db, username)
       .andWhere('exp.id', id)
       .first()
   },
 
-  getRegionsForExperiment(db, experiment_id, username) {
+
+
+  insertExperiment(db, username, newExperiment) {
     return db
-      .from('experiment_regions AS reg')
-      .select(
-        'reg.id',
-        'reg.regions',
-        'reg.date_created',
-				'reg.experiment_id',
+      .insert(newExperiment)
+      .into('experiments')
+      .returning('*')
+      .then(([experiment]) => experiment)
+      .then(experiment =>
+        ExperimentsService.getByUserAndId(db, username, experiment.id)
       )
-			.leftJoin(
-				'experiments as exp',
-				'reg.experiment_id',
-				'exp.id',
-			)
-			.leftJoin(
-				'visiri_users as usr',
-				'exp.user_id',
-				'usr.id',
-			)
-      .where('usr.user_name', username)
   },
 
   serializeExperiments(experiments) {
@@ -80,25 +71,7 @@ const ExperimentsService = {
     }
   },
 
-  serializeExperimentRegions(regions) {
-    return regions.map(this.serializeExperimentRegion)
-  },
 
-  serializeExperimentRegion(region) {
-    const regionTree = new Treeize()
-
-    // Some light hackiness to allow for the fact that `treeize`
-    // only accepts arrays of objects, and we want to use a single
-    // object.
-    const regionData = regionTree.grow([region]).getData()[0]
-
-    return {
-      id: regionData.id,
-      date_created: regionData.date_created,
-      experiment_id: regionData.experiment_id,
-      regions: regionData.regions,
-    }
-  },
 }
 
 const userFields = [

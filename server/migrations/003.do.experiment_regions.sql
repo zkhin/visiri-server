@@ -4,5 +4,5 @@ CREATE TABLE experiment_regions (
 	date_modified TIMESTAMP,
 	experiment_id INTEGER REFERENCES experiments(id) ON DELETE
 		SET	NULL NOT NULL,
-	regions TEXT
+	regions JSON
 );

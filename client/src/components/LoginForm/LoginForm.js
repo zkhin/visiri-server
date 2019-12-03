@@ -23,7 +23,7 @@ export default class LoginForm extends Component {
     this.props.onLoginSuccess()
   }
 
-  handerSubmitJwtAuth = ev => {
+  handleSubmitJwtAuth = ev => {
     ev.preventDefault()
     this.setState({error:null})
     const { user_name, password } = ev.target

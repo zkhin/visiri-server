@@ -3,6 +3,18 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 const AuthService = {
+  createUser(db, newUser) {
+    return db
+      .insert(newUser)
+      .into('visiri_users')
+      .returning('*')
+      .then(([user]) => user)
+      .then(user =>
+        AuthService.getUserWithUserName(db, user.user_name)
+    )
+    .then(res=>console.log(res))
+
+  },
   getUserWithUserName(db, user_name) {
     return db('visiri_users')
       .where({ user_name })

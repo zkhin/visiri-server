@@ -2,8 +2,42 @@ const express = require('express')
 const AuthService = require('./auth-service')
 const authRouter = express.Router()
 const jsonBodyParser = express.json()
+const bcrypt = require('bcryptjs')
 
 authRouter
+	.post('/register', (req, res) => {
+		let newUsername = req.body.user_name
+		AuthService.getUserWithUserName(
+			req.app.get('db'),
+			newUsername
+		)
+			.then(dbUser => {
+				if (dbUser) {
+					return res.status(400).json({
+						error: 'User already exists!'
+					})
+				}
+				const newUser = {
+					user_name: req.body.user_name,
+					full_name: req.body.full_name,
+					password: req.body.password,
+					nickname: req.body.nickname
+				}
+				bcrypt.genSalt(10, (err, salt) => {
+					if(err) throw err
+					bcrypt.hash(newUser.password, salt, (err, hash) => {
+						if(err) throw err
+						newUser.password = hash
+						AuthService.createUser(req.app.get('db'), newUser)
+							.then(user => {
+								res.status(201)
+								res.json(user)
+							})
+							.catch(err => res.status(400).json(err))
+					})
+				})
+			})
+	})
   .post('/login', jsonBodyParser, (req, res, next) => {
 		const {user_name, password} = req.body
 		const loginUser = {user_name, password}

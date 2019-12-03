@@ -24,7 +24,6 @@ experimentsRouter.route('/')
       experiment_type,
       user_id: req.user.id
     }
-    console.log(req.user)
     ExperimentsService.insertExperiment(
       req.app.get('db'),
       req.user.user_name,

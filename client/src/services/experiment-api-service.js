@@ -64,7 +64,6 @@ const ExperimentApiService = {
       body: JSON.stringify({
         celltype: experiment.celltype,
         experiment_type: experiment.experiment_type,
-        user_id: experiment.user_id,
       })
     })
   },

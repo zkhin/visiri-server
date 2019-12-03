@@ -1,8 +1,4 @@
-
-const express = require('express')
-const { requireAuth } = require('../middleware/jwt-auth')
 const multer = require('multer')
-const imagesRouter = express.Router()
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -14,7 +10,7 @@ const storage = multer.diskStorage({
       filetype = 'png';
     }
     if (file.mimetype === 'image/jpeg') {
-      filetype = 'jpg';
+      filetype = 'jpeg';
     }
     if (file.mimetype === 'image/tif') {
       filetype = 'tif';
@@ -25,14 +21,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-imagesRouter.route('/images')
-  .all(requireAuth)
-  .post(upload.single('file'), (req, res, next) => {
-    if (!req.file) {
-      res.status(500)
-      return next(err)
-    }
-    res.json({})
-  })
-
-module.exports = imagesRouter
+module.exports = {
+  upload,
+}

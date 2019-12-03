@@ -24,13 +24,26 @@ const RegionsService = {
       .where('exp.id', experiment_id)
   },
 
-  insertRegions(db, experiment_id, newRegions) {
+  getRegionById(db, region_id) {
+    return db
+      .from('experiment_regions AS reg')
+      .select(
+        'reg.id',
+        'reg.regions',
+        'reg.experiment_id',
+        'reg.date_created',
+      )
+      .where('reg.id', region_id)
+      .first()
+  },
+  insertRegions(db, newRegions) {
     return db
       .insert(newRegions)
       .into('experiment_regions as reg')
       .returning('*')
-      .where('reg.experiment_id', experiment_id)
-      .first()
+      .then(([region]) =>
+        RegionsService.getRegionById(db, region.id)
+      )
   },
 
   serializeExperimentRegions(regions) {

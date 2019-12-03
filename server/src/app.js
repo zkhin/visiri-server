@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
@@ -19,7 +20,9 @@ app.use(morgan((NODE_ENV === 'production') ? 'tiny' : 'common', {
 }))
 app.use(cors())
 app.use(helmet())
-
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static(__dirname, 'imagestorage'));
 app.use('/api/experiments', experimentsRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/images', imagesRouter)

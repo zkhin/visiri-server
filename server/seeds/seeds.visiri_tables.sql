@@ -13,8 +13,8 @@ VALUES
 
 INSERT INTO experiments (celltype, experiment_type, user_id)
 VALUES
-	('Test Cells', 'Calibration', 'http://localhost:3000/public/test1.jpeg', 480, 240, 1),
-	('Test Cells2', 'Calibration', 'http://localhost:3000/public/test2.jpeg', 324, 240, 1);
+	('Test Cells', 'Calibration', 1),
+	('Test Cells2', 'Calibration', 2);
 
 INSERT INTO images (image_url, image_width, image_height, experiment_id)
 VALUES

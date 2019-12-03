@@ -3,12 +3,20 @@ const ExperimentsService = require('./experiments-service')
 const RegionsService = require('../regions/regions-service')
 const ImagesService = require('../images/images-service')
 const { requireAuth } = require('../middleware/jwt-auth')
+const { upload } = require('../images/images-router')
 const jsonBodyParser = express.json()
 
 const experimentsRouter = express.Router()
 
 experimentsRouter.route('/')
   .all(requireAuth)
+  .get((req, res, next) => {
+    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user.user_name)
+      .then(experiments => {
+        res.json(ExperimentsService.serializeExperiments(experiments))
+      })
+      .catch(next)
+  })
   .post(jsonBodyParser, (req, res, next) => {
     let { celltype, experiment_type } = req.body
     let newExperiment = {
@@ -21,14 +29,12 @@ experimentsRouter.route('/')
       req.user.user_name,
       newExperiment
     )
+      .then(experiment => {
+        res.status(201)
+          .json(ExperimentsService.serializeExperiment(experiment))
+    })
   })
-  .get((req, res, next) => {
-    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user.user_name)
-      .then(experiments => {
-        res.json(ExperimentsService.serializeExperiments(experiments))
-      })
-      .catch(next)
-  })
+
 
 experimentsRouter.route('/:experiment_id')
   .all(requireAuth)
@@ -37,6 +43,43 @@ experimentsRouter.route('/:experiment_id')
     res.json(ExperimentsService.serializeExperiment(res.experiment))
   })
 
+experimentsRouter.route('/:experiment_id/images')
+  .all(requireAuth)
+  .all(checkExperimentExists)
+  .get((req, res, next) => {
+    ImagesService.getImagesByExperiment(
+      req.app.get('db'),
+      req.params.experiment_id
+    )
+      .then(images => {
+        let imagesData = images.map(image => ImagesService.serializeImage(image))
+        res.json(imagesData)
+      })
+      .catch(next)
+  })
+  .post(upload.single('image'), (req, res, next) => {
+    if (!req.file) {
+      res.status(500)
+      return next(err)
+    }
+    let filePath = `${req.protocol}://${req.host}/${req.file.path}`
+    let newImage = {
+      image_url: filePath,
+      image_width: req.body.image_width,
+      image_height: req.body.image_height,
+    }
+    ImagesService.insertImage(
+      req.app.get('db'),
+      req.params.experiment_id,
+      newImage,
+    )
+      .then(image => {
+        res.status(201)
+        res.json(ImagesService.serializeImage(image))
+      })
+    .catch(next)
+
+  })
 experimentsRouter.route('/:experiment_id/regions')
   .all(requireAuth)
   .all(checkExperimentExists)
@@ -49,6 +92,16 @@ experimentsRouter.route('/:experiment_id/regions')
         res.json(RegionsService.serializeExperimentRegions(regions))
       })
       .catch(next)
+  })
+  .post((req, res, next) => {
+    if (!req.body.regions) {
+      res.status(500)
+      return next(err)
+    }
+    let newRegions = {
+      experiment_id: req.params.experiment_id,
+      regions: req.body.regions,
+    }
   })
 
 /* async/await syntax for promises */

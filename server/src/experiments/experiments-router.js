@@ -39,8 +39,13 @@ experimentsRouter.route('/')
 experimentsRouter.route('/:experiment_id')
   .all(requireAuth)
   .all(checkExperimentExists)
-  .get((req, res) => {
-    res.json(ExperimentsService.serializeExperiment(res.experiment))
+  .get((req, res, next) => {
+    ExperimentsService.getByUserAndId(req.app.get('db'), req.user.user_name, req.params.experiment_id)
+      .then(experiments => {
+        res.status(200)
+        res.json(ExperimentsService.serializeExperiments(experiments))
+      })
+      .catch(next)
   })
 
 experimentsRouter.route('/:experiment_id/images')
@@ -62,15 +67,16 @@ experimentsRouter.route('/:experiment_id/images')
       res.status(500)
       return next(err)
     }
-    let filePath = `${req.protocol}://${req.host}/${req.file.path}`
+    console.log(req.file)
+    let filePath = `${req.protocol}://${req.hostname}/${req.file.path}`
     let newImage = {
       image_url: filePath,
       image_width: req.body.image_width,
       image_height: req.body.image_height,
+      experiment_id: req.params.experiment_id,
     }
     ImagesService.insertImage(
       req.app.get('db'),
-      req.params.experiment_id,
       newImage,
     )
       .then(image => {
@@ -102,6 +108,11 @@ experimentsRouter.route('/:experiment_id/regions')
       experiment_id: req.params.experiment_id,
       regions: req.body.regions,
     }
+    RegionsService.insertRegions(db, newRegions)
+      .then(region =>
+        res.json(RegionsService.serializeExperimentRegion(region))
+    )
+    .catch(next)
   })
 
 /* async/await syntax for promises */

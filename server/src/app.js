@@ -7,7 +7,6 @@ const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const experimentsRouter = require('./experiments/experiments-router')
 const authRouter = require('./auth/auth-router')
-const imagesRouter = require('./images/images-router')
 
 const app = express()
 
@@ -22,10 +21,9 @@ app.use(cors())
 app.use(helmet())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static(__dirname, 'imagestorage'));
+app.use(express.static('imagestorage'))
 app.use('/api/experiments', experimentsRouter)
 app.use('/api/auth', authRouter)
-app.use('/api/images', imagesRouter)
 
 app.use(function errorHandler(error, req, res, next) {
   let response

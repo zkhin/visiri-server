@@ -9,6 +9,7 @@ const ExperimentsService = {
         'exp.celltype',
         'exp.date_created',
         'exp.experiment_type',
+        'exp.user_id',
         ...userFields,
       )
       .leftJoin(
@@ -43,7 +44,7 @@ const ExperimentsService = {
   },
 
   serializeExperiments(experiments) {
-    return experiments.map(this.serializeExperiments)
+    return experiments.map(experiment => ExperimentsService.serializeExperiment(experiment))
   },
 
   serializeExperiment(experiment) {
@@ -59,7 +60,7 @@ const ExperimentsService = {
       celltype: xss(experimentData.celltype),
       experiment_type: xss(experimentData.experiment_type),
       date_created: experimentData.date_created,
-      user_id: experimentData.user_id || {},
+      user_id: experimentData.user_id,
     }
   },
 

@@ -28,7 +28,8 @@ const ExperimentsService = {
 
   getByUserAndId(db, username, id) {
     return ExperimentsService.getAllUserExperiments(db, username)
-      .andWhere('exp.id', id)
+      .where('exp.id', id)
+      .first()
   },
 
   insertExperiment(db, username, newExperiment) {
@@ -40,7 +41,7 @@ const ExperimentsService = {
       .then(experiment =>
         ExperimentsService.getByUserAndId(db, username, experiment.id)
       )
-      .first()
+
   },
 
   serializeExperiments(experiments) {

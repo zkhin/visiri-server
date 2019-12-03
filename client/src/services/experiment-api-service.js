@@ -27,6 +27,20 @@ const ExperimentApiService = {
           : res.json()
       )
   },
+
+  getExperimentImages(experimentId) {
+    return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
+      headers: {
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+
   getExperimentRegions(experimentId) {
     return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
       headers: {
@@ -39,44 +53,45 @@ const ExperimentApiService = {
           : res.json()
       )
   },
-  postImage(experimentId, newImage) {
-    let formdata = new FormData()
-    formdata.append()
-    return fetch`${config.API_ENDPOINT}/experiments/${experimentId}/images`, {
+
+  postExperiment(experiment) {
+    return fetch(`${config.API_ENDPOINT}/experiments`, {
       method: 'POST',
       headers: {
-        'content-type': 'multipart/form-data',
+        'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },
       body: JSON.stringify({
         celltype: experiment.celltype,
         experiment_type: experiment.experiment_type,
-        image_url: newImage.image_url,
-        image_width: newImage.image_width,
-        image_height: newImage.image_height,
-        experiment_id: newImage.experiment_id,
+        user_id: experiment.user_id,
       })
-    }
+    })
   },
 
-	postExperiment(experiment) {
-		return fetch(`${config.API_ENDPOINT}/experiments`, {
-			method: 'POST',
-			headers: {
-				'content-type': 'application/json',
-				'authorization': `bearer ${TokenService.getAuthToken()}`
-			},
-			body: JSON.stringify({
-				celltype: experiment.celltype,
-				experiment_type: experiment.experiment_type,
-				image_url: experiment.image_url,
-				image_width: experiment.image_width,
-				image_height: experiment.image_height,
-				user_id: experiment.user_id,
-			})
-		})
-	},
-  postRegions(experimentId, regions) {
+  postExperimentImage(experimentId, image, image_width, image_height) {
+    let formdata = new FormData({
+      image,
+      image_width,
+      image_height,
+    })
+
+    return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/images`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'multipart/form-data',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({ formdata })
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+        )
+  },
+
+  postExperimentRegions(experimentId, regions) {
 		return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
       method: 'POST',
       headers: {

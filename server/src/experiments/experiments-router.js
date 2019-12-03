@@ -22,8 +22,9 @@ experimentsRouter.route('/')
     let newExperiment = {
       celltype,
       experiment_type,
-      user_id: req.user.user_id
+      user_id: req.user.id
     }
+    console.log(req.user)
     ExperimentsService.insertExperiment(
       req.app.get('db'),
       req.user.user_name,
@@ -32,7 +33,8 @@ experimentsRouter.route('/')
       .then(experiment => {
         res.status(201)
           .json(ExperimentsService.serializeExperiment(experiment))
-    })
+      })
+      .catch(next)
   })
 
 
@@ -62,12 +64,11 @@ experimentsRouter.route('/:experiment_id/images')
       })
       .catch(next)
   })
-  .post(upload.single('image'), (req, res, next) => {
+  .post(jsonBodyParser, upload.single('image'), (req, res, next) => {
     if (!req.file) {
       res.status(500)
       return next(err)
     }
-    console.log(req.file)
     let filePath = `${req.protocol}://${req.hostname}:8000/api/images/${req.file.filename}`
     let newImage = {
       image_url: filePath,
@@ -100,17 +101,20 @@ experimentsRouter.route('/:experiment_id/regions')
       .catch(next)
   })
   .post((req, res, next) => {
-    if (!req.body.regions) {
+    if (!req.body) {
       res.status(500)
       return next(err)
     }
+    console.log(req.body.regions)
     let newRegions = {
       experiment_id: req.params.experiment_id,
-      regions: req.body.regions,
+      regions: JSON.stringify(req.body.regions),
     }
-    RegionsService.insertRegions(db, newRegions)
-      .then(region =>
+    RegionsService.insertRegions(req.app.get('db'), newRegions)
+      .then(region => {
+        res.status(201)
         res.json(RegionsService.serializeExperimentRegion(region))
+      }
     )
     .catch(next)
   })

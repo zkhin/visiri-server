@@ -68,7 +68,7 @@ experimentsRouter.route('/:experiment_id/images')
       return next(err)
     }
     console.log(req.file)
-    let filePath = `${req.protocol}://${req.hostname}/${req.file.path}`
+    let filePath = `${req.protocol}://${req.hostname}:8000/api/images/${req.file.filename}`
     let newImage = {
       image_url: filePath,
       image_width: req.body.image_width,

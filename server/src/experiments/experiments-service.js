@@ -49,10 +49,6 @@ const ExperimentsService = {
 
   serializeExperiment(experiment) {
     const experimentTree = new Treeize()
-
-    // Some light hackiness to allow for the fact that `treeize`
-    // only accepts arrays of objects, and we want to use a single
-    // object.
     const experimentData = experimentTree.grow([experiment]).getData()[0]
 
     return {

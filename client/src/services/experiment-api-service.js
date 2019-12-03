@@ -39,6 +39,25 @@ const ExperimentApiService = {
           : res.json()
       )
   },
+  postImage(experimentId, newImage) {
+    let formdata = new FormData()
+    formdata.append()
+    return fetch`${config.API_ENDPOINT}/experiments/${experimentId}/images`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'multipart/form-data',
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+      body: JSON.stringify({
+        celltype: experiment.celltype,
+        experiment_type: experiment.experiment_type,
+        image_url: newImage.image_url,
+        image_width: newImage.image_width,
+        image_height: newImage.image_height,
+        experiment_id: newImage.experiment_id,
+      })
+    }
+  },
 
 	postExperiment(experiment) {
 		return fetch(`${config.API_ENDPOINT}/experiments`, {

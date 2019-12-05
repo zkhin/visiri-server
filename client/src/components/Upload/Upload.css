@@ -9,7 +9,7 @@ h2 {
 }
 
 a {
-  text-decoration: underline;
+  /* text-decoration: underline; */
   color: #f2f2f2;
   font-size: larger;
 }
@@ -99,7 +99,7 @@ div.fakefile {
 }
 
 input.file {
-  /* width: 80vw; */
+  width: 70vw;
   /* height: 50vh; */
   /* top: 50%;
   left: 50%; */
@@ -114,15 +114,16 @@ input.file {
 
 .menu {
   display: flex;
+  text-decoration: none;
   align-self: center;
 	padding: 10px;
-	border-radius: 8px;
+	border-radius: 0;
 	color: #0d4387;
   background-color: #ffffff;
   border: 1px solid #82b9ff;
 	margin-left: auto;
   margin-right: auto;
-  margin-top: 5px;
+  margin-bottom: 10px;
   font-size: larger;
   font-weight: 500;
   max-width: 500px;
@@ -146,6 +147,7 @@ input.file {
   justify-content: space-between;
 	position: relative;
   margin-top: 1rem;
+  margin-bottom: 3em;
   border: 1px solid slategray;
   border-radius: 2px;
   padding-top: 8px;

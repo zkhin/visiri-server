@@ -16,10 +16,13 @@ a {
   text-decoration-style: none;
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
-li {
+a.demo {
+  margin-bottom: 4em;
+}
+.intro {
   /* line-height: 1.5rem; */
   padding: .5em;
   font-size: .9em;
@@ -33,7 +36,7 @@ li {
   margin-right: auto;
   width: 100vw;
   max-width: 500px;
-  border-radius: 8px;
+  margin-bottom: 1em;
   /* margin-top: 2rem; */
   /* box-shadow: 0 0 5px grey; */
 }

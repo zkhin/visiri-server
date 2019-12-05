@@ -7,7 +7,7 @@ export default class ExperimentsPage extends Component {
   render() {
     return (
       <div>
-
+        <Experiments />
       </div>
     )
   }

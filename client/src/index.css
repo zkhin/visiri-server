@@ -23,5 +23,5 @@ h1 {
   font-size: 3rem;
   color: white;
   justify-content: center;
-  text-shadow:1px 1px 5px #fff, 1px 1px 10px #ccc;
+  text-shadow:1px 1px 8px #fff, 1px 1px 3px rgb(255, 255, 255);
 }

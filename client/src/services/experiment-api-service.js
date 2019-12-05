@@ -29,7 +29,7 @@ const ExperimentApiService = {
   },
 
   getExperimentImages(experimentId) {
-    return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
+    return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/images`, {
       headers: {
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },

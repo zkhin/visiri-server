@@ -15,21 +15,25 @@ h1 {
   /* text-align: center; */
 }
 
+.logo {
+  text-decoration: none;
+}
+
 .authmenu {
   position: absolute;
-  right: 5px;
+  right: 9px;
   top: 10px;
   font-size: 1em;
   /* padding: 1em, 1em; */
 }
 
 .top {
-  right: 5px;
+  /* right: 5px; */
   top: 1em;
 }
 
 .bottom {
-  right: 5px;
+  /* right: 5px; */
   top: 2.5em;
 }
 

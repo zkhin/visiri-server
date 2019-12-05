@@ -18,12 +18,54 @@ VALUES
 
 INSERT INTO images (image_url, image_width, image_height, experiment_id)
 VALUES
-  ('testimagepath', 123, 123, 1),
-  ('testimagepath2', 234, 234, 2);
+  ('http://localhost:8000/api/images/image-1575343884666.jpeg', 123, 123, 1),
+  ('http://localhost:8000/api/images/image-1575346548427.jpeg', 234, 234, 2);
 
 INSERT INTO experiment_regions (experiment_id, regions)
 VALUES
-	(1, '{"data": ["1", "2"], "point": {"x": "2", "y": "2"}, "regionSize": "42"}'),
-		(2, '{"point": {"x": "4", "y": "2"}, "regionSize": "42"}');
+	(1,
+      '{
+        "data": [
+          {
+            "color": "black",
+            "point": {
+              "x": "3",
+              "y": "5"
+            },
+            "regionSize": "65"
+          },
+          {
+            "color": "red",
+            "point": {
+              "x": "5",
+              "y": "2"
+            },
+            "regionSize": "24"
+          }
+        ]
+      }'
+      ),
+		(2,
+      '{
+        "data": [
+          {
+            "color": "black",
+            "point": {
+              "x": "3",
+              "y": "5"
+            },
+            "regionSize": "65"
+          },
+          {
+            "color": "red",
+            "point": {
+              "x": "5",
+              "y": "2"
+            },
+            "regionSize": "24"
+          }
+        ]
+      }'
+    );
 
 COMMIT;

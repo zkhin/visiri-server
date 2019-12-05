@@ -10,7 +10,7 @@ export default class Landing extends Component {
           <img className="splash" src="/Completed 2.jpg"></img>
           <Link to="/register" className="menu">Register</Link>
           <Link to="/login" className="menu">Login</Link>
-          <ul>
+          <ul className="intro">
             <li>
               Take a picture of the cells you want to count.
             </li>
@@ -24,7 +24,7 @@ export default class Landing extends Component {
               When you are done, click Finished to save and upload the data to your collection of experiments.
             </li>
           </ul>
-          <Link to="/upload">Demo</Link>
+          <Link className="demo" to="/upload">Demo</Link>
         </section>
       </>
     )

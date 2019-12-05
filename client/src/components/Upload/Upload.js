@@ -29,7 +29,6 @@ export default class Upload extends Component {
 
   handleDemo = (e) => {
     e.preventDefault()
-    e.stopPropagation()
     let img = new Image()
     img.onload = () => {
       this.context.setImage(img.src, img.width, img.height)
@@ -104,33 +103,38 @@ export default class Upload extends Component {
   pinchZoomWheelEvent(stage) {
   if (stage) {
     stage.getContent().addEventListener('wheel', (wheelEvent) => {
-      wheelEvent.preventDefault()
-      const oldScale = stage.scaleX()
+      if (this.state.uploaded) {
+        wheelEvent.preventDefault()
+        wheelEvent.stopPropagation()
 
-      const pointer = stage.getPointerPosition()
-      const startPos = {
-        x: pointer.x / oldScale - stage.x() / oldScale,
-        y: pointer.y / oldScale - stage.y() / oldScale,
+        const oldScale = stage.scaleX()
+
+        const pointer = stage.getPointerPosition()
+        const startPos = {
+          x: pointer.x / oldScale - stage.x() / oldScale,
+          y: pointer.y / oldScale - stage.y() / oldScale,
+        }
+
+        const deltaYBounded = !(wheelEvent.deltaY % 1) ?
+          Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) :
+          Math.abs(wheelEvent.deltaY)
+        const scaleBy = .10 + deltaYBounded / 95
+        const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy
+        stage.scale({ x: newScale, y: newScale })
+
+        const newPosition = {
+          x: (pointer.x / newScale - startPos.x) * newScale,
+          y: (pointer.y / newScale - startPos.y) * newScale,
+        }
+        stage.position(newPosition)
+        stage.batchDraw()
+        this.setState({
+          ...this.state,
+          position: newPosition,
+          scale: newScale,
+        })
       }
 
-			const deltaYBounded = !(wheelEvent.deltaY % 1) ?
-				Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) :
-				Math.abs(wheelEvent.deltaY)
-      const scaleBy = .10 + deltaYBounded / 95
-      const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy
-      stage.scale({ x: newScale, y: newScale })
-
-      const newPosition = {
-        x: (pointer.x / newScale - startPos.x) * newScale,
-        y: (pointer.y / newScale - startPos.y) * newScale,
-      }
-      stage.position(newPosition)
-      stage.batchDraw()
-      this.setState({
-        ...this.state,
-        position: newPosition,
-        scale: newScale,
-      })
     })
     }
   }
@@ -220,33 +224,46 @@ export default class Upload extends Component {
     this.setState({ scaleBoxOffset: this.containerRef.current.offsetHeight / 2 })
   }
 
-
+  outsideImageBounds = (point) => {
+    if (point.x < 0 || point.y < 0 || point.x > this.context.image.width || point.y > this.context.image.height) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   createCellRegion = (e) => {
-		let point = null
-		if (e.target.name === 'stage') {
-			point = this.getRelativePointerPosition(e.target.getStage())
-		}
-		let region = {
-				id: this.context.regions.length+1,
-				color: Konva.Util.getRandomColor(),
-				regionSize: this.context.regionSize / this.state.scale,
-		}
-		if (point){
-				region.point = [point]
-    } else {
-      point = this.getRelativeContainerCenterPosition(this.stageRef.current)
-      region.point = point
-      console.log(region.point)
-    }
-    this.setState({
-      markedLocation: {
-        x: region.point.x * this.state.scale,
-        y: region.point.y * this.state.scale,
+    if (this.state.uploaded) {
+      let point = null
+      if (e.target.name === 'stage') {
+        point = this.getRelativePointerPosition(e.target.getStage())
       }
-    })
-    this.context.setRegions(this.context.regions.concat(region))
-    this.renderCellRegion(region)
+      let region = {
+        id: this.context.regions.length + 1,
+        color: Konva.Util.getRandomColor(),
+        regionSize: this.context.regionSize / this.state.scale,
+      }
+      if (point) {
+        region.point = [point]
+      } else {
+        point = this.getRelativeContainerCenterPosition(this.stageRef.current)
+        region.point = point
+      }
+      if (this.outsideImageBounds(region.point)) {
+        return
+      } else {
+        this.setState({
+          markedLocation: {
+            x: region.point.x * this.state.scale,
+            y: region.point.y * this.state.scale,
+          }
+        })
+        this.context.setRegions(this.context.regions.concat(region))
+        this.renderCellRegion(region)
+      }
+
+    }
+
   }
 
   updateStagePosition = (e) => {
@@ -308,7 +325,6 @@ export default class Upload extends Component {
     box2.draw()
     box1.tween.play()
     box2.tween.play()
-    // layer.batchDraw()
   }
 
 
@@ -336,24 +352,26 @@ export default class Upload extends Component {
             {this.state.uploaded &&
               <div className="scaleBox">
               </div>
+
             }
-						<Stage
-							name="stage"
-							container="container"
+            <Stage
+              name="stage"
+              container="container"
               ref={this.stageRef}
               className="canvas"
               onDragEnd={this.updateStagePosition}
               draggable
-							width={window.innerWidth}
-							height={window.innerWidth}
+              width={window.innerWidth}
+              height={window.innerHeight}
             >
 
               <Layer ref={this.imageLayerRef}>
-								<MyImage image={this.state.image} />
+                <MyImage image={this.state.image} />
               </Layer>
               <Layer ref={this.regionsLayerRef}>
               </Layer>
             </Stage>
+
           </div>
           <button className="menu" onClick={this.createCellRegion}>Mark Cell</button>
           {/* <button className="menu" onClick={()=>{this.setState({debug: !this.state.debug})}}>Debug</button> */}

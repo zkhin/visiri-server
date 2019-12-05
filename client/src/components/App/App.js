@@ -20,9 +20,12 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App__header">
-          <Navbar />
-        </header>
+        {window.location.pathname === '/' ? null :
+          <header className="App__header">
+            <Navbar />
+          </header>
+        }
+
         <main className="App__main">
           <Switch>
             <Route exact path={'/'} component={LandingPage} />

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Work+Sans:200, 400');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:200, 300, 400');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400');
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
 * {
@@ -17,9 +17,11 @@ body {
 }
 
 h1 {
-  font-family: "Work Sans";
-  font-weight: 100;
-  font-size: 2rem;
+  font-family: "Open Sans";
+  letter-spacing: 10px;
+  font-weight: 400;
+  font-size: 3rem;
   color: white;
   justify-content: center;
+  text-shadow:1px 1px 5px #fff, 1px 1px 10px #ccc;
 }

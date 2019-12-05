@@ -10,24 +10,22 @@ export default class Navbar extends Component {
 
   renderLogoutLink() {
     return (
-      <div className='Header__logged-in'>
-        <Link
+        <Link className='authmenu top'
           onClick={this.handleLogoutClick}
           to='/'>
           Logout
         </Link>
-      </div>
     )
   }
 
   renderLoginLink() {
     return (
-      <div className='Header__not-logged-in'>
-        <Link
+      <div>
+        <Link className='authmenu top'
           to='/login'>
           Log in
         </Link>
-        <Link
+        <Link className='authmenu bottom'
           to='/register'>
           Register
         </Link>
@@ -37,15 +35,15 @@ export default class Navbar extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container">
         <nav className="nav">
           <h1>
               visiri
           </h1>
-          {/* {TokenService.hasAuthToken()
+          {TokenService.hasAuthToken()
             ? this.renderLogoutLink()
             : this.renderLoginLink()
-          } */}
+          }
         </nav>
       </div>
     )

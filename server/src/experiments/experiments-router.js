@@ -58,8 +58,10 @@ experimentsRouter.route('/:experiment_id/images')
       req.params.experiment_id
     )
       .then(images => {
-        let imagesData = images.map(image => ImagesService.serializeImage(image))
-        res.json(imagesData)
+        if (images.length > 0) {
+          let imagesData = images.map(image => ImagesService.serializeImage(image))
+          res.json(imagesData)
+        }
       })
       .catch(next)
   })

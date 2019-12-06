@@ -14,11 +14,13 @@ VALUES
 INSERT INTO experiments (celltype, experiment_type, user_id)
 VALUES
 	('Test Cells', 'Calibration', 1),
+  ('Test Cells2', 'Calibration', 1),
 	('Test Cells2', 'Calibration', 2);
 
 INSERT INTO images (image_url, image_width, image_height, experiment_id)
 VALUES
   ('http://localhost:8000/api/images/image-1575343884666.jpeg', 123, 123, 1),
+  ('http://localhost:8000/api/images/image-1575346548427.jpeg', 234, 234, 1),
   ('http://localhost:8000/api/images/image-1575346548427.jpeg', 234, 234, 2);
 
 INSERT INTO experiment_regions (experiment_id, regions)

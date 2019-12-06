@@ -9,7 +9,7 @@ export default class RegionsList extends React.Component {
 	render() {
 		return (
 			<div className="regionslist">
-					{this.props.regions.map(region => {
+					{this.props.regions.map((region, i) => {
 						return (
 							<button
 								key={region.id}
@@ -19,7 +19,7 @@ export default class RegionsList extends React.Component {
 								boxShadow: `0 0 5px ${region.color}`,
 								border: `3px solid ${region.color}`
 							}}>
-								{region.id}
+								{i+1}
 							</button>
 						)
 					})}

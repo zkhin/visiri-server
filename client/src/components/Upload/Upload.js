@@ -6,6 +6,7 @@ import RegionsList from '../RegionsList/RegionsList'
 import Debug from '../Debug/Debug'
 import { Link } from 'react-router-dom'
 import './Upload.css'
+import ExperimentApiService from '../../services/experiment-api-service'
 
 export default class Upload extends Component {
 
@@ -27,6 +28,8 @@ export default class Upload extends Component {
   imageLayerRef = React.createRef()
   regionsLayerRef = React.createRef()
 
+
+
   handleDemo = (e) => {
     e.preventDefault()
     let img = new Image()
@@ -43,6 +46,7 @@ export default class Upload extends Component {
   }
 
   handleImport = (e) => {
+    let imageform = document.getElementById('imageform')
     let reader = new FileReader()
     reader.onload = (event) => {
       let img = new Image()
@@ -60,6 +64,11 @@ export default class Upload extends Component {
     }
     try {
       reader.readAsDataURL(e.target.files[0])
+      ExperimentApiService.postExperimentImage(this.context.id, e.target.files[0], this.state.img.width, this.state.image.height).then(res => {
+        console.log(res)
+      })
+        .catch(err => console.log(err))
+
     } catch {
       this.setState({ error: 'No image provided' })
       return
@@ -343,9 +352,11 @@ export default class Upload extends Component {
               <Debug className="debug" stateProp={this.state} imageLayerRef={this.imageLayerRef} stageRef={this.stageRef} />
             }
             {!this.state.uploaded &&
-              <form className="uploadform">
+              <form
+              id="imageform"
+              className="uploadform">
                 <div className="uploadform">
-                  <input className="menu file" type="file" id="imageLoader" name="imageLoader" onChange={this.handleImport} />
+                  <input className="menu file" type="file" id="image" name="image" onChange={this.handleImport} />
                 </div>
               </form>
             }

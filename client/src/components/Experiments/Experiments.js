@@ -7,10 +7,13 @@ import RegionsList from '../RegionsList/RegionsList'
 
 export default class Experiments extends Component {
   static contextType = MarkupContext
+  // static defaultProps = {
+  //   onCreateSuccess: () => {},
+  // }
   state = {
-    experiments: [],
-    images: [],
-    regions: [],
+    experiments: null,
+    images: null,
+    regions: null,
     creating: false,
     experimentsLoaded: false,
     imagesLoaded: false,
@@ -19,12 +22,13 @@ export default class Experiments extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target)
     let newExperiment = {
       experiment_type: e.target.experiment_type.value,
       celltype: e.target.celltype.value,
     }
-    ExperimentApiService.postExperiment(newExperiment)
+    ExperimentApiService.postExperiment(newExperiment).then(res => {
+      this.context.setExperiment(res.id, res.celltype, res.experiment_type)
+    }).then(() => this.props.onCreateSuccess())
   }
 
   async fetchExperiments() {
@@ -41,6 +45,7 @@ export default class Experiments extends Component {
     })
     let imgs = Promise.all(images)
     imgs.then(img => this.setState({
+      ...this.state,
       images: img,
       imagesLoaded: true,
     }))
@@ -51,6 +56,7 @@ export default class Experiments extends Component {
     })
     let regs = Promise.all(regions)
     regs.then(reg => this.setState({
+      ...this.state,
       regions: reg,
       regionsLoaded: true,
     }))
@@ -70,7 +76,7 @@ export default class Experiments extends Component {
 
 
   async fetchExperimentImages() {
-    let images = this.state.experiments.map(async exp => {
+    let images = await this.state.experiments.map(async exp => {
       let imgs = await ExperimentApiService.getExperimentImages(exp.id)
       return imgs
     })
@@ -150,10 +156,6 @@ export default class Experiments extends Component {
     }
   }
 
-  displayRegion() {
-
-  }
-
 
   render() {
     return (
@@ -170,7 +172,7 @@ export default class Experiments extends Component {
             <button className="button menu" type="submit">Submit</button>
           </form>
         }
-        {this.state.experiments.length > 0
+        {this.state.experiments
           ? this.renderExperiments()
           : "You have not created any experiments"
         }

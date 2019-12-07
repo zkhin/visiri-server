@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ExperimentApiService from '../services/experiment-api-service'
 
 const MarkupContext = React.createContext({
   image: {
@@ -31,27 +32,17 @@ export class MarkupContextProvider extends Component {
       magnification: null,
     },
     setImageSrc: this.setImageSrc,
-    experimentName: null,
-    experimentType: 'calibration',
-    cellType: null,
+    id: null,
+    experiment_type: null,
+    celltype: null,
     cellDiameter: null,
     scaling: null,
-    // regions: [
-    //   {
-    //     id: null,
-    //     point: {x: null, y: null},
-    //     color: 'black',
-    //     regionSize: 28,
-    //   }
-    // ],
     regions: [],
     selectedRegionId: null,
     selectRegion: this.selectRegion,
     regionSize: 56,
-    setRegionSize: this.setRegionSize,
-    // setImage: () => {},
-    // setExperiment: (name, type) => { },
-    // setDiameter: () => { },
+    setExperiment: this.setExperiment,
+    postImage: this.postImage,
   }
 
   getRegionById = (regionId) => {
@@ -77,11 +68,11 @@ export class MarkupContextProvider extends Component {
     })
   }
 
-  setExperiment = (name, cellType, type='calibration') => {
+  setExperiment = (id, celltype, experiment_type='Calibration') => {
     this.setState({
-      experimentName: name,
-      experimentType: type,
-      cellType: cellType,
+      id,
+      celltype,
+      experiment_type,
     })
   }
 
@@ -96,13 +87,15 @@ export class MarkupContextProvider extends Component {
     this.setState({regions: newRegions})
   }
 
+
   render() {
     const value = {
       image: this.state.image,
       setImage: this.setImage,
-      experimentName: this.state.experimentName,
-      experimentType: this.state.experimentType,
-      cellType: this.state.cellType,
+      setExperiment: this.setExperiment,
+      id: this.state.id,
+      experiment_type: this.state.experiment_type,
+      celltype: this.state.celltype,
       cellDiameter: this.state.cellDiameter,
       scaling: this.state.scaling,
       regions: this.state.regions,
@@ -111,6 +104,7 @@ export class MarkupContextProvider extends Component {
       regionSize: this.state.regionSize,
       setRegionSize: this.setRegionSize,
       setRegions: this.setRegions,
+      postImage: this.postImage,
     }
     return (
       <MarkupContext.Provider value={value}>

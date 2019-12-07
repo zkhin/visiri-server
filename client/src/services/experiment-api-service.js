@@ -66,22 +66,25 @@ const ExperimentApiService = {
         experiment_type: experiment.experiment_type,
       })
     })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
   },
 
   postExperimentImage(experimentId, image, image_width, image_height) {
-    let formdata = new FormData({
-      image,
-      image_width,
-      image_height,
-    })
+    let formdata = new FormData()
+    formdata.append('image', image)
+    formdata.append('image_width', image_width)
+    formdata.append('image_height', image_height)
 
     return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/images`, {
       method: 'POST',
       headers: {
-        'content-type': 'multipart/form-data',
         'authorization': `bearer ${TokenService.getAuthToken()}`
       },
-      body: JSON.stringify({ formdata })
+      body: formdata
     })
       .then(res =>
         (!res.ok)

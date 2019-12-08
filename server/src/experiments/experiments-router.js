@@ -104,7 +104,7 @@ experimentsRouter.route('/:experiment_id/regions')
       })
       .catch(next)
   })
-  .post((req, res, next) => {
+  .post(jsonBodyParser, (req, res, next) => {
     if (!req.body) {
       res.status(500)
       return next(err)

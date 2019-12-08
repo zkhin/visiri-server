@@ -1,5 +1,6 @@
 .regionslist {
-	padding-left: 2px;
+	padding-left: 5px;
+	padding: 2px 2px 2px;
 	padding-top: 2px;
 	border: slategray solid 1px;
 	border-radius: 8px;
@@ -29,4 +30,32 @@
 	width: 30px;
 	text-align: center;
 	font-family: Inconsolata;
+}
+
+button:focus {
+	outline: 0;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: fit-content;
+	background-color: #4b4b4b;
+	color: #DEEEFF;
+	text-align: center;
+	padding: 5px 5px;
+	border-radius: 8px;
+	position: absolute;
+	top:100%;
+	left: 50%;
+	margin-left: -40px;
+	z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+	visibility: visible;
 }

@@ -248,7 +248,7 @@ export default class Upload extends Component {
         point = this.getRelativePointerPosition(e.target.getStage())
       }
       let region = {
-        id: this.context.regions.length + 1,
+        id: this.context.regions.regions.data.length + 1,
         color: Konva.Util.getRandomColor(),
         regionSize: this.context.regionSize / this.state.scale,
       }
@@ -267,7 +267,7 @@ export default class Upload extends Component {
             y: region.point.y * this.state.scale,
           }
         })
-        this.context.setRegions(this.context.regions.concat(region))
+        this.context.setRegions(this.context.regions.regions.data.concat(region))
         this.renderCellRegion(region)
       }
 
@@ -387,11 +387,11 @@ export default class Upload extends Component {
           <button className="menu" onClick={this.createCellRegion}>Mark Cell</button>
           {/* <button className="menu" onClick={()=>{this.setState({debug: !this.state.debug})}}>Debug</button> */}
 
-          {/* {this.context.regions.length >= 1 && */}
+          {this.context.regions.regions.data.length >= 0 &&
+            this.state.uploaded &&
             <>
-            <RegionsList regions={this.context.regions} />
-            <Link to='/create'><button className="menu finish">Finish Calibration</button></Link></>
-            {/* } */}
+              <RegionsList regions={this.context.regions.regions.data} />
+              <Link to='/create'><button className="menu finish">Finish Calibration</button></Link></>}
         </div>
       </>
     )

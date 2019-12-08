@@ -37,7 +37,38 @@ export class MarkupContextProvider extends Component {
     celltype: null,
     cellDiameter: null,
     scaling: null,
-    regions: [],
+    regions: {
+      id: null,
+      experiment_id: null,
+      regions: {
+        data: [],
+      }
+    },
+      // {
+      //   "id": 1,
+      //   "date_created": "2019-12-07T21:05:05.248Z",
+      //   "experiment_id": 1,
+      //   "regions": {
+      //     "data": [
+      //       {
+      //         "color": "black",
+      //         "point": {
+      //           "x": "3",
+      //           "y": "5"
+      //         },
+      //         "regionSize": "65"
+      //       },
+      //       {
+      //         "color": "red",
+      //         "point": {
+      //           "x": "5",
+      //           "y": "2"
+      //         },
+      //         "regionSize": "24"
+      //       }
+      //     ]
+      //   }
+      // }
     selectedRegionId: null,
     selectRegion: this.selectRegion,
     regionSize: 56,
@@ -73,6 +104,12 @@ export class MarkupContextProvider extends Component {
       id,
       celltype,
       experiment_type,
+      regions: [{
+        experiment_id: id,
+        regions: {
+          data: []
+        }
+      }]
     })
   }
 
@@ -83,8 +120,14 @@ export class MarkupContextProvider extends Component {
     })
   }
 
-  setRegions = (newRegions) => {
-    this.setState({regions: newRegions})
+  setRegions = (newData) => {
+    this.setState({
+      regions: {
+        regions: {
+          data: newData,
+        }
+      }
+    })
   }
 
 

@@ -4,6 +4,7 @@ import MarkupContext from '../../contexts/MarkupContext'
 import ExperimentApiService from '../../services/experiment-api-service'
 import './Experiments.css'
 import RegionsList from '../RegionsList/RegionsList'
+import ExperimentImages from './ExperimentImages'
 
 export default class Experiments extends Component {
   static contextType = MarkupContext
@@ -16,8 +17,6 @@ export default class Experiments extends Component {
     regions: null,
     creating: false,
     experimentsLoaded: false,
-    imagesLoaded: false,
-    regionsLoaded: false,
   }
 
   handleSubmit = (e) => {
@@ -34,32 +33,31 @@ export default class Experiments extends Component {
   async fetchExperiments() {
     let experiments = await ExperimentApiService.getExperiments()
     this.setState({
-      ...this.state,
       experiments: experiments,
       experimentsLoaded: true,
     })
 
-    let images = this.state.experiments.map(async (exp, i) => {
-      let imgs = await ExperimentApiService.getExperimentImages(exp.id)
-      return imgs
-    })
-    let imgs = Promise.all(images)
-    imgs.then(img => this.setState({
-      ...this.state,
-      images: img,
-      imagesLoaded: true,
-    }))
+    // let images = this.state.experiments.map(async (exp, i) => {
+    //   let imgs = await ExperimentApiService.getExperimentImages(exp.id)
+    //   return imgs
+    // })
+    // let imgs = Promise.all(images)
+    // imgs.then(img => this.setState({
+    //   ...this.state,
+    //   images: img,
+    //   imagesLoaded: true,
+    // }))
 
-    let regions = this.state.experiments.map(async (exp, i) => {
-      let regs = await ExperimentApiService.getExperimentRegions(exp.id)
-      return regs
-    })
-    let regs = Promise.all(regions)
-    regs.then(reg => this.setState({
-      ...this.state,
-      regions: reg,
-      regionsLoaded: true,
-    }))
+    // let regions = this.state.experiments.map(async (exp, i) => {
+    //   let regs = await ExperimentApiService.getExperimentRegions(exp.id)
+    //   return regs
+    // })
+    // let regs = Promise.all(regions)
+    // regs.then(reg => this.setState({
+    //   ...this.state,
+    //   regions: reg,
+    //   regionsLoaded: true,
+    // }))
 
 
 
@@ -75,29 +73,9 @@ export default class Experiments extends Component {
   }
 
 
-  async fetchExperimentImages() {
-    let images = await this.state.experiments.map(async exp => {
-      let imgs = await ExperimentApiService.getExperimentImages(exp.id)
-      return imgs
-    })
 
-    this.setState({
-      ...this.state,
-      images: images,
-      imagesLoaded: true,
-    })
 
-  }
 
-  async fetchExperimentRegions(experimentId) {
-    try {
-      return await ExperimentApiService.getExperimentRegions(experimentId)
-    } catch (err) {
-      this.setState({ error: err })
-      return
-    }
-
-  }
 
   componentDidMount() {
     this.fetchExperiments()
@@ -121,11 +99,11 @@ export default class Experiments extends Component {
                   </li>
                 </ul>
                 <div className="review">
-                  {this.state.imagesLoaded &&
-                    this.renderImages(i)
+                  {
+                  <ExperimentImages experimentId={experiment.id} />
                   }
-                  {this.state.regionsLoaded &&
-                    this.renderRegions(i)
+                  {
+                  <RegionsList experimentId={experiment.id} />
                   }
                 </div>
               </div>

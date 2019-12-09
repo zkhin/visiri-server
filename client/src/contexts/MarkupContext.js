@@ -101,15 +101,16 @@ export class MarkupContextProvider extends Component {
 
   setExperiment = (id, celltype, experiment_type='Calibration') => {
     this.setState({
-      id,
+			...this.state,
+      id: id,
       celltype,
       experiment_type,
-      regions: [{
+      regions: {
         experiment_id: id,
         regions: {
           data: []
         }
-      }]
+      }
     })
   }
 
@@ -122,7 +123,9 @@ export class MarkupContextProvider extends Component {
 
   setRegions = (newData) => {
     this.setState({
+			...this.state,
       regions: {
+				...this.state.regions,
         regions: {
           data: newData,
         }

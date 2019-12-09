@@ -59,7 +59,7 @@ export default class RegionsList extends React.Component {
 					border: `3px solid ${region.color}`
 				}}>
 				{i+1}
-				<span className="tooltiptext">x:{region.point.x} y:{region.point.y}</span>
+				<span className="tooltiptext">x:{Math.ceil(region.point.x)} y:{Math.ceil(region.point.y)}</span>
 			</button>
 		)
 	}

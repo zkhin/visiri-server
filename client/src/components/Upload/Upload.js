@@ -28,7 +28,15 @@ export default class Upload extends Component {
   imageLayerRef = React.createRef()
   regionsLayerRef = React.createRef()
 
-
+	handleFinish = (e) => {
+		e.preventDefault()
+		ExperimentApiService.postExperimentRegions(this.context.regions.experiment_id, this.context.regions.regions)
+			.then(res =>{
+				this.props.onFinish()
+				return res
+			})
+			.catch(err=>this.setState({error:err}))
+	}
 
   handleDemo = (e) => {
     e.preventDefault()
@@ -45,9 +53,16 @@ export default class Upload extends Component {
     img.src = this.context.image.src
   }
 
+	handleImageSend = (image) => {
+      ExperimentApiService.postExperimentImage(this.context.id, image, this.state.image.width, this.state.image.height).then(res => {
+        console.log(res)
+      })
+        .catch(err => console.log(err))
+
+	}
   handleImport = (e) => {
-    let imageform = document.getElementById('imageform')
     let reader = new FileReader()
+		let image = e.target.files[0]
     reader.onload = (event) => {
       let img = new Image()
       img.onload = () => {
@@ -57,17 +72,14 @@ export default class Upload extends Component {
           uploaded: true,
           image: img,
           scale: 1,
-          }
+				}, ()=>
+					this.handleImageSend(image)
         )
       }
       img.src = event.target.result
     }
     try {
       reader.readAsDataURL(e.target.files[0])
-      ExperimentApiService.postExperimentImage(this.context.id, e.target.files[0], this.state.img.width, this.state.image.height).then(res => {
-        console.log(res)
-      })
-        .catch(err => console.log(err))
 
     } catch {
       this.setState({ error: 'No image provided' })
@@ -247,6 +259,7 @@ export default class Upload extends Component {
       if (e.target.name === 'stage') {
         point = this.getRelativePointerPosition(e.target.getStage())
       }
+			
       let region = {
         id: this.context.regions.regions.data.length + 1,
         color: Konva.Util.getRandomColor(),
@@ -259,6 +272,7 @@ export default class Upload extends Component {
         region.point = point
       }
       if (this.outsideImageBounds(region.point)) {
+				point = null
         return
       } else {
         this.setState({
@@ -391,7 +405,7 @@ export default class Upload extends Component {
             this.state.uploaded &&
             <>
               <RegionsList regions={this.context.regions.regions.data} />
-              <Link to='/create'><button className="menu finish">Finish Calibration</button></Link></>}
+              <button onClick={this.handleFinish} className="menu finish">Finish Calibration</button></>}
         </div>
       </>
     )

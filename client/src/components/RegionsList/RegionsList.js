@@ -51,7 +51,8 @@ export default class RegionsList extends React.Component {
 	renderCellButton(region, onClick, i) {
 		return (
 			<button
-				key={i+1}
+				key={i + 1}
+				id={`button-${i+1}`}
 				onClick={onClick}
 				className="cellbutton tooltip"
 				style={{

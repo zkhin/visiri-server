@@ -138,6 +138,26 @@ input.file {
   width: 80vw; */
 }
 
+.tooltip .errortext {
+	visibility: hidden;
+	width: fit-content;
+	background-color: #4b4b4b;
+	color: #DEEEFF;
+	text-align: center;
+  padding: 5px 5px;
+	border-radius: 8px;
+	position: absolute;
+	top:-200%;
+	left: 50%;
+  margin-left: -100%;
+	z-index: 1;
+}
+
+.tooltip:hover .errortext {
+  visibility: visible;
+  border: 1px solid red;
+}
+
 .upload {
   display: flex;
   flex-direction: column;

@@ -23,6 +23,7 @@ const ExperimentsService = {
         'usr.id',
       )
       .groupBy('exp.id', 'usr.id')
+      .orderBy('exp.id', 'desc')
 			.where('usr.user_name', username)
   },
 

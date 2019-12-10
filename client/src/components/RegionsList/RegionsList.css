@@ -42,6 +42,8 @@ button:focus {
 }
 
 .tooltip .tooltiptext {
+	pointer-events: none;
+	touch-action: none;
 	visibility: hidden;
 	width: fit-content;
 	background-color: #4b4b4b;
@@ -51,7 +53,7 @@ button:focus {
 	border-radius: 8px;
 	position: absolute;
 	top:100%;
-	left: 50%;
+	left: 100%;
 	margin-left: -40px;
 	z-index: 1;
 }

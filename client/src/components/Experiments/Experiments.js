@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { NiceDate } from '../Utils/Utils'
 import MarkupContext from '../../contexts/MarkupContext'
 import ExperimentApiService from '../../services/experiment-api-service'
 import './Experiments.css'
@@ -36,46 +37,7 @@ export default class Experiments extends Component {
       experiments: experiments,
       experimentsLoaded: true,
     })
-
-    // let images = this.state.experiments.map(async (exp, i) => {
-    //   let imgs = await ExperimentApiService.getExperimentImages(exp.id)
-    //   return imgs
-    // })
-    // let imgs = Promise.all(images)
-    // imgs.then(img => this.setState({
-    //   ...this.state,
-    //   images: img,
-    //   imagesLoaded: true,
-    // }))
-
-    // let regions = this.state.experiments.map(async (exp, i) => {
-    //   let regs = await ExperimentApiService.getExperimentRegions(exp.id)
-    //   return regs
-    // })
-    // let regs = Promise.all(regions)
-    // regs.then(reg => this.setState({
-    //   ...this.state,
-    //   regions: reg,
-    //   regionsLoaded: true,
-    // }))
-
-
-
-    // let expWithImagesRegions = await this.state.experiments.map(async exp => {
-    //   return await this.fetchExperimentRegions(exp.id)
-    // })
-    // await this.setState({
-    //   ...this.state,
-    //   experiments: expWithImagesRegions,
-    //   regionsLoaded: true,
-    // })
-
   }
-
-
-
-
-
 
   componentDidMount() {
     this.fetchExperiments()
@@ -95,7 +57,7 @@ export default class Experiments extends Component {
                     {experiment.experiment_type}
                   </li>
                   <li>
-                    {experiment.date_created}
+                  {NiceDate({ date: Date.parse(experiment.date_created) })}
                   </li>
                 </ul>
                 <div className="review">

@@ -41,6 +41,20 @@ const ExperimentApiService = {
       )
   },
 
+  getDefaultImage() {
+    return fetch(`${config.API_ENDPOINT}/images`, {
+      headers: {
+        'authorization': `bearer ${TokenService.getAuthToken()}`
+      },
+    })
+      .then(res =>
+      (!res.ok)
+        ? res.json().then(e => Promise.reject(e))
+        : res.json()
+    )
+  },
+
+
   getExperimentRegions(experimentId) {
     return fetch(`${config.API_ENDPOINT}/experiments/${experimentId}/regions`, {
       headers: {

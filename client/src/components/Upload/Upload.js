@@ -29,13 +29,17 @@ export default class Upload extends Component {
   regionsLayerRef = React.createRef()
 
 	handleFinish = (e) => {
-		e.preventDefault()
+    e.preventDefault()
+    if (!this.context.id) {
+      this.setState({error: 'To submit, you must login and create an experiment first'})
+    } else {
 		ExperimentApiService.postExperimentRegions(this.context.regions.experiment_id, this.context.regions.regions)
 			.then(res =>{
 				this.props.onFinish()
 				return res
 			})
 			.catch(err=>this.setState({error:err}))
+    }
 	}
 
   handleDemo = (e) => {
@@ -48,6 +52,8 @@ export default class Upload extends Component {
         uploaded: true,
         image: img,
         scale: 1,
+      }, () => {
+          this.handleImageSend(img)
       })
     }
     img.src = this.context.image.src
@@ -62,7 +68,8 @@ export default class Upload extends Component {
 	}
   handleImport = (e) => {
     let reader = new FileReader()
-		let image = e.target.files[0]
+    let image = e.target.files[0]
+    console.log(image)
     reader.onload = (event) => {
       let img = new Image()
       img.onload = () => {
@@ -120,6 +127,40 @@ export default class Upload extends Component {
     return transform.point(pos)
   }
 
+  findCellOnStage = (e, stage=this.stageRef.current) => {
+
+    let regionId = e.target.id.split('-')[1]
+    let region = this.context.regions.regions.data[regionId-1]
+    let regionPoint = region.point
+    let scale = this.context.regionSize / region.regionSize
+    const newPosition = {
+      x: this.containerRef.current.offsetWidth / 2 - regionPoint.x * scale ,
+      y: this.containerRef.current.offsetHeight / 2 - regionPoint.y*scale
+    }
+    stage.scale({x: scale, y: scale})
+    stage.position(newPosition)
+    stage.batchDraw()
+    // let transform =
+    // stage.scale({ x: newScale, y: newScale })
+
+// x: region.point.x - region.regionSize / this.state.scale / 2,
+      // y: (region.point.y - region.regionSize / this.state.scale / 2),
+
+    // stage.position(newPosition)
+    // stage.batchDraw()
+    // const newPosition = {
+    //   x: (pointer.x / newScale - startPos.x) * newScale,
+    //   y: (pointer.y / newScale - startPos.y) * newScale,
+    // }
+    // stage.position(newPosition)
+    // stage.batchDraw()
+    this.setState({
+      ...this.state,
+      position: newPosition,
+      scale: scale,
+    })
+  }
+
 
   pinchZoomWheelEvent(stage) {
   if (stage) {
@@ -139,7 +180,7 @@ export default class Upload extends Component {
         const deltaYBounded = !(wheelEvent.deltaY % 1) ?
           Math.abs(Math.min(-10, Math.max(10, wheelEvent.deltaY))) :
           Math.abs(wheelEvent.deltaY)
-        const scaleBy = .10 + deltaYBounded / 95
+        const scaleBy = .10 + deltaYBounded / 90
         const newScale = wheelEvent.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy
         stage.scale({ x: newScale, y: newScale })
 
@@ -259,7 +300,7 @@ export default class Upload extends Component {
       if (e.target.name === 'stage') {
         point = this.getRelativePointerPosition(e.target.getStage())
       }
-			
+
       let region = {
         id: this.context.regions.regions.data.length + 1,
         color: Konva.Util.getRandomColor(),
@@ -330,24 +371,28 @@ export default class Upload extends Component {
     layer.add(box2)
     box1.tween = new Konva.Tween({
       node: box1,
-      scaleX: 1.3,
-      scaleY: 1.3,
+      radius: 1.2 * (region.regionSize / 2),
       easing: Konva.Easings.EaseInOut,
       duration: .3,
       onFinish: () => box1.tween.reverse()
     })
     box2.tween = new Konva.Tween({
       node: box2,
-      scaleX: 1.2,
-      scaleY: 1.2,
+      scaleX: .7,
+      scaleY: .7,
       easing: Konva.Easings.EaseInOut,
       duration: .2,
+      stroke: "rgb(203, 36, 49, 0.9)",
+      strokeWidth: 3 / this.state.scale,
+      opacity: 1,
       onFinish: () => box2.tween.reverse()
     })
     box1.draw()
     box2.draw()
+    layer.batchDraw()
     box1.tween.play()
     box2.tween.play()
+
   }
 
 
@@ -404,8 +449,17 @@ export default class Upload extends Component {
           {this.context.regions.regions.data.length >= 0 &&
             this.state.uploaded &&
             <>
-              <RegionsList regions={this.context.regions.regions.data} />
-              <button onClick={this.handleFinish} className="menu finish">Finish Calibration</button></>}
+            <RegionsList onClick={this.findCellOnStage} regions={this.context.regions.regions.data} />
+              <button
+                onClick={this.handleFinish}
+                className="menu finish tooltip">
+                Finish Calibration
+                {typeof this.state.error == 'string' &&
+                <span className="errortext">{this.state.error}</span>
+                }
+              </button>
+            </>
+          }
         </div>
       </>
     )

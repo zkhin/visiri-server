@@ -127,38 +127,32 @@ export default class Upload extends Component {
     return transform.point(pos)
   }
 
-  findCellOnStage = (e, stage=this.stageRef.current) => {
-
+  findCellOnStage = (e, stage = this.stageRef.current) => {
     let regionId = e.target.id.split('-')[1]
-    let region = this.context.regions.regions.data[regionId-1]
+    let region = this.context.regions.regions.data[regionId - 1]
     let regionPoint = region.point
     let scale = this.context.regionSize / region.regionSize
     const newPosition = {
       x: this.containerRef.current.offsetWidth / 2 - regionPoint.x * scale ,
       y: this.containerRef.current.offsetHeight / 2 - regionPoint.y*scale
     }
-    stage.scale({x: scale, y: scale})
-    stage.position(newPosition)
-    stage.batchDraw()
-    // let transform =
-    // stage.scale({ x: newScale, y: newScale })
-
-// x: region.point.x - region.regionSize / this.state.scale / 2,
-      // y: (region.point.y - region.regionSize / this.state.scale / 2),
-
-    // stage.position(newPosition)
-    // stage.batchDraw()
-    // const newPosition = {
-    //   x: (pointer.x / newScale - startPos.x) * newScale,
-    //   y: (pointer.y / newScale - startPos.y) * newScale,
-    // }
+    stage.tween = new Konva.Tween({
+      node: stage,
+      duration: .25,
+      x: newPosition.x,
+      y: newPosition.y,
+      easing: Konva.Easings.EaseIn,
+      scaleX: scale,
+      scaleY: scale,
+    })
+    // stage.scale({x: scale, y: scale})
     // stage.position(newPosition)
     // stage.batchDraw()
     this.setState({
       ...this.state,
       position: newPosition,
       scale: scale,
-    })
+    }, () => stage.tween.play())
   }
 
 
@@ -352,7 +346,7 @@ export default class Upload extends Component {
       // x: region.point.x - region.regionSize / this.state.scale / 2,
       // y: (region.point.y - region.regionSize / this.state.scale / 2),
       fill: "transparent",
-      strokeWidth: 4 / this.state.scale,
+      strokeWidth: 5 / this.state.scale,
       stroke: region.color,
     })
     let box2 = new Konva.RegularPolygon({
@@ -364,7 +358,7 @@ export default class Upload extends Component {
       x: region.point.x,
       y: region.point.y,
       fill: "transparent",
-      strokeWidth: 1 / this.state.scale,
+      strokeWidth: 2 / this.state.scale,
       stroke: "white",
     })
     layer.add(box1)
@@ -373,18 +367,20 @@ export default class Upload extends Component {
       node: box1,
       radius: 1.2 * (region.regionSize / 2),
       easing: Konva.Easings.EaseInOut,
-      duration: .3,
+      duration: .25,
+      // opacity: .7,
       onFinish: () => box1.tween.reverse()
+
     })
     box2.tween = new Konva.Tween({
       node: box2,
-      scaleX: .7,
-      scaleY: .7,
+      scaleX: 1,
+      scaleY: 1,
       easing: Konva.Easings.EaseInOut,
       duration: .2,
       stroke: "rgb(203, 36, 49, 0.9)",
-      strokeWidth: 3 / this.state.scale,
-      opacity: 1,
+      strokeWidth: 4 / this.state.scale,
+      opacity: .8,
       onFinish: () => box2.tween.reverse()
     })
     box1.draw()

@@ -48,26 +48,26 @@ export default class Experiments extends Component {
       <>
         {this.state.experimentsLoaded &&
           this.state.experiments.map((experiment, i) =>
-              <div key={experiment.id} className="experiment">
-                <ul>
-                  <li>
-                    {experiment.celltype}
-                  </li>
-                  <li>
-                    {experiment.experiment_type}
-                  </li>
-                  <li>
-                  {NiceDate({ date: Date.parse(experiment.date_created) })}
-                  </li>
-                </ul>
-                <div className="review">
-                  {
+            <div key={experiment.id} className="experiment">
+               <div className="review">
+
                   <ExperimentImages experimentId={experiment.id} />
-                  }
-                  {
-                  <RegionsList experimentId={experiment.id} />
-                  }
+                <content className="expinfo">
+                  <p>
+                    {experiment.celltype}
+                  </p>
+                  <p>
+                    {experiment.experiment_type}
+                  </p>
+                  <p>
+                    {NiceDate({ date: Date.parse(experiment.date_created) })}
+                  </p>
+                </content>
+
+
                 </div>
+              <RegionsList experimentId={experiment.id} />
+
               </div>
           )
         }
@@ -109,7 +109,7 @@ export default class Experiments extends Component {
             <label>Experiment Type:
               <input name="experiment_type" type="text" placeholder="Calibration"></input>
             </label>
-            <button className="button menu" type="submit">Submit</button>
+            <button className="menu" type="submit">Submit</button>
           </form>
         }
         {this.state.experiments

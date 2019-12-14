@@ -67,7 +67,7 @@ export default class RegionsList extends React.Component {
 
 	render() {
 		return (
-			<div className="regionslist">
+			<div className="regionslist scrollbar">
 				{
 					this.state.regionsLoaded &&
 					this.state.readFromProps &&

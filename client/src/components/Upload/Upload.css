@@ -5,13 +5,19 @@ h2 {
   color: #f2f2f2;
   text-align: center;
   font-size: 1em;
-  font-family: "Open Sans";
+  /* font-family: "AvenirNextLTPro-Regular"; */
 }
 
 a {
-  /* text-decoration: underline; */
+text-decoration: none;
   color: #f2f2f2;
-  font-size: larger;
+}
+
+
+a.sample_link {
+  text-decoration: underline;
+  color: #f2f2f2;
+  font-size: 1.2em;
 }
 
 h5 {
@@ -119,14 +125,15 @@ input.file {
 	padding: 10px;
 	border-radius: 0;
 	color: #0d4387;
-  background-color: #ffffff;
+  background-color: rgb(255, 255, 255);
   border: 1px solid #82b9ff;
 	margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  font-size: larger;
-  font-weight: 500;
-  max-width: 500px;
+  font-size: 1em;
+  font-weight: normal;
+  max-width: 400px;
+    /* font-family: "Open Sans"; */
 }
 
 
@@ -141,8 +148,8 @@ input.file {
 .tooltip .errortext {
 	visibility: hidden;
 	width: fit-content;
-	background-color: #4b4b4b;
-	color: #DEEEFF;
+	background-color: #f9f9f9;
+	color: #0d4387;
 	text-align: center;
   padding: 5px 5px;
 	border-radius: 8px;
@@ -165,12 +172,13 @@ input.file {
   margin-right: auto;
   align-items: center;
   justify-content: space-between;
-	position: relative;
-  margin-top: 1rem;
+  position: relative;
+  /* top: 0; */
+  margin-top: 5px;
   margin-bottom: 3em;
   border: 1px solid slategray;
   border-radius: 2px;
-  padding-top: 8px;
+  padding-top: .5em;
   background-color: #DEEEFF;
   width: 95vw;
 }

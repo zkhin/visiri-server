@@ -39,7 +39,7 @@ export default class Navbar extends Component {
         <nav className="nav">
           <h1>
             <Link className="logo" to={
-              TokenService.hasAuthToken() ? "/experiments" : "/register"}
+              TokenService.hasAuthToken() ? "/experiments" : "/"}
             >
               visiri
             </Link>

@@ -2,39 +2,44 @@ h1 {
   /* margin-left: 2em; */
   color: white;
   text-align: center;
-  margin: 0;
+  /* margin-top: 20px; */
 }
 .nav {
   /* height: 50px; */
   /* display: flex; */
   /* justify-content: space-evenly; */
-  background-color: #0d4387;
+  /* background-color: #0d4387; */
   /* width: 100%; */
-  font-weight: 400;
+  /* font-weight: 400; */
   color: white;
   /* text-align: center; */
 }
 
-.logo {
-  text-decoration: none;
+nav .logo {
+
+  font-weight: lighter;
+  font-family: "AvenirNextLTPro-Regular";
+  font-size: 1.5em;
+  text-shadow: 1px 1px 8px #fff, 1px 1px 14px rgba(255, 255, 255, 0.15);
 }
 
 .authmenu {
   position: absolute;
-  right: 9px;
+  text-decoration: underline;
+  right: 1em;
   top: 10px;
-  font-size: 1em;
+  font-size: .9em;
   /* padding: 1em, 1em; */
 }
 
 .top {
   /* right: 5px; */
-  top: 1em;
+  top: .5em;
 }
 
 .bottom {
   /* right: 5px; */
-  top: 2.5em;
+  top: 2em;
 }
 
 .container {

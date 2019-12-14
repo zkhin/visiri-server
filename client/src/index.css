@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:200, 300, 400');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400');
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
+@font-face  {
+font-family: "AvenirNextLTPro-Regular";
+src: url('AvenirNextLTPro-Regular.otf');
+}
 
 * {
   box-sizing: border-box;
@@ -9,19 +13,18 @@
 body {
   margin: 0;
   /* padding: .5rem; */
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "AvenirNextLTPro", "Open Sans"; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 1rem;
+  font-size: 1em;
   background-color: #0d4387;
 }
 
 h1 {
-  font-family: "Open Sans";
-  letter-spacing: 10px;
-  font-weight: 400;
-  font-size: 3rem;
+  font-family: "AvenirNextLTPro-Regular";
+  letter-spacing: 4px;
+  font-size: 2rem;
   color: white;
   justify-content: center;
-  text-shadow:1px 1px 8px #fff, 1px 1px 3px rgb(255, 255, 255);
+  /* text-shadow:1px 1px 8px #fff, 1px 1px 3px rgb(255, 255, 255); */
 }

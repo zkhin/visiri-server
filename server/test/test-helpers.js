@@ -1,0 +1,305 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+function makeUsersArray() {
+  return [
+    {
+      id: 1,
+      user_name: 'test-user-1',
+      full_name: 'Test user 1',
+      nickname: 'TU1',
+      password: 'password',
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+    {
+      id: 2,
+      user_name: 'test-user-2',
+      full_name: 'Test user 2',
+      nickname: 'TU2',
+      password: 'password',
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+    {
+      id: 3,
+      user_name: 'test-user-3',
+      full_name: 'Test user 3',
+      nickname: 'TU3',
+      password: 'password',
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+    {
+      id: 4,
+      user_name: 'test-user-4',
+      full_name: 'Test user 4',
+      nickname: 'TU4',
+      password: 'password',
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+  ]
+}
+
+function makeExperimentsArray(users) {
+  return [
+    {
+      id: 1,
+      celltype: 'Test Cells 1',
+      experiment_type: 'Calibration',
+      user_id: users[0].id,
+      date_created: '2029-01-22T16:28:32.615Z',
+    },
+    {
+      id: 2,
+      celltype: 'Test Cells 2',
+      experiment_type: 'Calibration',
+      user_id: users[0].id,
+      date_created: '2021-01-22T16:28:32.615Z',
+    },
+    {
+      id: 3,
+      celltype: 'Test Cells 3',
+      experiment_type: 'Calibration',
+      user_id: users[1].id,
+      date_created: '2020-01-22T16:28:32.615Z',
+    },
+  ]
+}
+
+function makeImagesArray(experiments) {
+	return [
+		{
+			id: 1,
+			experiment_id: experiments[0].id,
+			date_created: '2029-01-22T16:28:32.615Z',
+			image_url: 'http://localhost:8000/api/images/image-1575343884666.jpeg',
+			image_width: 123,
+			image_height: 120,
+		},
+		{
+			id: 2,
+			experiment_id: experiments[1].id,
+			date_created: '2029-01-22T16:12:32.433Z',
+			image_url: 'http://localhost:8000/api/images/image-1575346548427.jpeg',
+			image_width: 122,
+			image_height: 192,
+		},
+		{
+			id: 3,
+			experiment_id: experiments[2].id,
+			date_created: '2029-01-22T16:12:32.433Z',
+			image_url: 'http://localhost:8000/api/images/image-1575346548427.jpeg',
+			image_width: 122,
+			image_height: 192,
+		},
+	]
+}
+
+function makeRegionsArray(experiments) {
+  return [
+    {
+      id: 1,
+      experiment_id: experiments[0].id,
+      date_created: '2029-01-22T16:28:32.615Z',
+			regions: {data:
+				[
+					{
+						color: "black",
+						point: {x: 12, y: 53},
+						regionSize: 65,
+					},
+					{
+						color: "red",
+						point: {x: 52, y: 153},
+						regionSize: 32,
+					},
+					{
+						color: "green",
+						point: {x: 12, y: 53},
+						regionSize: 65,
+					},
+				]
+			},
+    },
+    {
+      id: 2,
+      experiment_id: experiments[2].id,
+      date_created: '2029-01-22T16:28:32.615Z',
+			regions: {data:
+				[
+					{
+						color: "white",
+						point: {x: 12, y: 53},
+						regionSize: 65,
+					},
+					{
+						color: "red",
+						point: {x: 52, y: 153},
+						regionSize: 32,
+					},
+					{
+						color: "green",
+						point: {x: 12, y: 53},
+						regionSize: 65,
+					},
+				]
+			},
+    },
+  ];
+}
+
+function makeExpectedExperiment(users, experiment, images=[], regions=[]) {
+  const user = users
+    .find(user => user.id === experiment.user_id)
+
+	const experimentImages = [images
+		.filter(image => image.experiment_id === experiment.id)]
+  const experimentRegions = [regions
+    .filter(region => region.experiment_id  === experiment.id)]
+
+  const number_of_regions = experimentRegions.length
+	const number_of_images = experimentImages.length
+
+  return {
+    id: experiment.id,
+    image_url: experimentImages[0].image_url,
+    image_width: experimentImages[0].image_width,
+    image_height: experimentImages[0].image_height,
+    celltype: experiment.celltype,
+    experiment_type: experiment.experiment_type,
+		regions: experimentRegions[0],
+    date_created: experiment.date_created,
+    number_of_regions,
+		number_of_images,
+    user: {
+      id: user.id,
+      user_name: user.user_name,
+      full_name: user.full_name,
+      nickname: user.nickname,
+      date_created: user.date_created,
+    },
+  }
+}
+
+function makeExpectedThingReviews(users, thingId, reviews) {
+  const expectedReviews = reviews
+    .filter(review => review.thing_id === thingId)
+
+  return expectedReviews.map(review => {
+    const reviewUser = users.find(user => user.id === review.user_id)
+    return {
+      id: review.id,
+      text: review.text,
+      rating: review.rating,
+      date_created: review.date_created,
+      user: {
+        id: reviewUser.id,
+        user_name: reviewUser.user_name,
+        full_name: reviewUser.full_name,
+        nickname: reviewUser.nickname,
+        date_created: reviewUser.date_created,
+      }
+    }
+  })
+}
+
+function makeMaliciousThing(user) {
+  const maliciousThing = {
+    id: 911,
+    image: 'http://placehold.it/500x500',
+    date_created: new Date().toISOString(),
+    title: 'Naughty naughty very naughty <script>alert("xss");</script>',
+    user_id: user.id,
+    content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+  }
+  const expectedThing = {
+    ...makeExpectedThing([user], maliciousThing),
+    title: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+    content: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+  }
+  return {
+    maliciousThing,
+    expectedThing,
+  }
+}
+
+function makeExperimentsFixtures() {
+  const testUsers = makeUsersArray()
+  const testExperiments = makeExperimentsArray(testUsers)
+	const testImages = makeImagesArray(testExperiments)
+  const testRegions = makeRegionsArray(testExperiments)
+  return { testUsers, testExperiments, testImages, testRegions }
+}
+
+function cleanTables(db) {
+  return db.raw(
+    `TRUNCATE
+      experiments,
+      visiri_users,
+			images,
+			experiment_regions
+      RESTART IDENTITY CASCADE`
+  )
+}
+
+function seedUsers(db, users){
+	const preppedUsers = users.map(user =>({
+		...user,
+			password: bcrypt.hashSync(user.password, 1)
+	}))
+	return db.into('visiri_users').insert(preppedUsers)
+		.then(()=>
+			db.raw(
+				`SELECT setval('visiri_users_id_seq', ?)`,
+				[users[users.length - 1].id],
+			)
+		)
+}
+
+
+function seedExperimentsTables(db, users, experiments, images=[], regions=[]) {
+	return db.transaction(async trx =>{
+		await seedUsers(trx, users)
+		await trx.into('experiments').insert(experiments)
+		// await trx.into('thingful_things').insert(reviews)
+		await trx.raw(
+			`SELECT setval('experiments_id_seq', ?)`,
+			[experiments[experiments.length -1].id],
+    )
+    images.length && await trx.into('images').insert(images)
+    regions.length && await trx.into('regions').insert(regions)
+	})
+}
+
+function seedMaliciousExperiment(db, user, experiment) {
+			return seedUsers(db, [user])
+				.then(()=>
+						db.into('experiments')
+							.insert([experiment])
+		)
+
+}
+
+function makeAuthHeader(user, secret=process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_id: user.id }, secret, {
+    subject: user.user_name,
+    algorithm: 'HS256',
+  })
+  return `Bearer ${token}`
+}
+
+module.exports = {
+  makeUsersArray,
+  makeExperimentsArray,
+  makeRegionsArray,
+	makeImagesArray,
+  makeExpectedExperiment,
+  makeExpectedExperimentImages,
+	makeExpectedExperimentRegions,
+  makeMaliciousExperiment,
+
+  makeExperimentsFixtures,
+  cleanTables,
+  seedExperimentsTables,
+  seedMaliciousExperiment,
+  makeAuthHeader,
+	seedUsers,
+}

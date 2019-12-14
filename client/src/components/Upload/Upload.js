@@ -343,6 +343,7 @@ export default class Upload extends Component {
       rotation: 45,
       x: region.point.x,
       y: region.point.y,
+      listening: false,
       // x: region.point.x - region.regionSize / this.state.scale / 2,
       // y: (region.point.y - region.regionSize / this.state.scale / 2),
       fill: "transparent",
@@ -357,6 +358,7 @@ export default class Upload extends Component {
       rotation: 45,
       x: region.point.x,
       y: region.point.y,
+      listening: false,
       fill: "transparent",
       strokeWidth: 2 / this.state.scale,
       stroke: "white",
@@ -398,7 +400,7 @@ export default class Upload extends Component {
         {!this.state.image &&
           <>
           <h2>Upload your image</h2>
-          <h5>Or use <a href="#" onClick={this.handleDemo}>Sample Image</a></h5>
+          <h5>Or use <Link className="sample_link" to="" onClick={this.handleDemo}>Sample Image</Link></h5>
           </>
           }
         <div className="upload">

@@ -34,15 +34,15 @@ import './index.css'
 //   farStar,
 //   fasStar,
 // )
-window.addEventListener(
-  "touchmove",
-  function (event) {
-    if (event.scale !== 1) {
-      event.preventDefault();
-    }
-  },
-  { passive: false }
-);
+// window.addEventListener(
+//   "touchmove",
+//   function (event) {
+//     if (event.scale !== 1) {
+//       event.preventDefault();
+//     }
+//   },
+//   { passive: false }
+// );
 ReactDOM.render(
   <BrowserRouter>
     <MarkupContextProvider>

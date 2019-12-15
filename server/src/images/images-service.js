@@ -11,6 +11,7 @@ const ImagesService = {
         'img.experiment_id',
         'img.image_width',
         'img.image_height',
+        'img.date_created',
       )
       .where('img.experiment_id', exp_id)
   },
@@ -23,6 +24,7 @@ const ImagesService = {
         'img.experiment_id',
         'img.image_width',
         'img.image_height',
+        'img.date_created',
       )
       .where('img.id', id)
       .first()
@@ -44,6 +46,7 @@ const ImagesService = {
       experiment_id: image.experiment_id,
       image_width: image.image_width,
       image_height: image.image_height,
+      date_created: image.date_created,
     }
   }
 

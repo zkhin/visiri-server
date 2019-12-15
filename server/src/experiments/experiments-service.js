@@ -2,7 +2,7 @@ const xss = require('xss')
 const Treeize = require('treeize')
 
 const ExperimentsService = {
-  getAllUserExperiments(db, username) {
+  getAllexperiments(db) {
 		return db.from('experiments AS exp')
       .select(
         'exp.id',
@@ -24,12 +24,13 @@ const ExperimentsService = {
       )
       .groupBy('exp.id', 'usr.id')
       .orderBy('exp.id', 'desc')
-			.where('usr.user_name', username)
+
   },
 
   getByUserAndId(db, username, id) {
-    return ExperimentsService.getAllUserExperiments(db, username)
+    return ExperimentsService.getAllexperiments(db)
       .where('exp.id', id)
+      .andWhere('usr.user_name', username)
       .first()
   },
 

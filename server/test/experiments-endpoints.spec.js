@@ -2,13 +2,15 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe('Reviews Endpoints', function() {
+describe('Experiments Endpoints', function() {
   let db
 
   const {
-    testThings,
     testUsers,
-  } = helpers.makeThingsFixtures()
+    testExperiments,
+    testImages,
+    testRegions,
+  } = helpers.makeExperimentsFixtures()
 
   before('make knex instance', () => {
     db = knex({
@@ -24,79 +26,263 @@ describe('Reviews Endpoints', function() {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`POST /api/reviews`, () => {
-    beforeEach('insert things', () =>
-      helpers.seedThingsTables(
-        db,
-        testUsers,
-        testThings,
-      )
-    )
+  describe('Protected endpoints', () => {
 
-    it(`creates an review, responding with 201 and the new review`, function() {
-      this.retries(3)
-      const testThing = testThings[0]
-      const testUser = testUsers[0]
-      const newReview = {
-        text: 'Test new review',
-        rating: 3,
-        thing_id: testThing.id,
-      }
-      return supertest(app)
-        .post('/api/reviews')
-        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .send(newReview)
-        .expect(201)
-        .expect(res => {
-          expect(res.body).to.have.property('id')
-          expect(res.body.rating).to.eql(newReview.rating)
-          expect(res.body.text).to.eql(newReview.text)
-          expect(res.body.thing_id).to.eql(newReview.thing_id)
-          expect(res.body.user.id).to.eql(testUser.id)
-          expect(res.headers.location).to.eql(`/api/reviews/${res.body.id}`)
-          const expectedDate = new Date().toLocaleString()
-          const actualDate = new Date(res.body.date_created).toLocaleString()
-          expect(actualDate).to.eql(expectedDate)
+
+    const protectedEndpoints = [
+      {
+        name: 'GET /api/experiments/:experiment_id',
+        path: '/api/experiments/1'
+      },
+      {
+        name: 'GET /api/experiments/:experiment_id/images',
+        path: '/api/experiments/1/images'
+      },
+      {
+        name: 'GET /api/experiments/:experiment_id/regions',
+        path: '/api/experiments/:experiment_id/regions'
+      },
+    ]
+
+    protectedEndpoints.forEach(endpoint => {
+
+      describe(endpoint.name, () => {
+        it(`responds with 401 'Missing bearer token' when no bearer token`, () => {
+          return supertest(app)
+            .get(endpoint.path)
+            .expect(401, {error: `Missing bearer token`})
         })
-        .expect(res =>
-          db
-            .from('thingful_reviews')
-            .select('*')
-            .where({ id: res.body.id })
-            .first()
-            .then(row => {
-              expect(row.text).to.eql(newReview.text)
-              expect(row.rating).to.eql(newReview.rating)
-              expect(row.thing_id).to.eql(newReview.thing_id)
-              expect(row.user_id).to.eql(testUser.id)
-              const expectedDate = new Date().toLocaleString()
-              const actualDate = new Date(row.date_created).toLocaleString()
-              expect(actualDate).to.eql(expectedDate)
-            })
-        )
+
+        it(`responds 401 'Unauthorized request' when invalid JWT secret`, () => {
+          const validUser = testUsers[0]
+          const invalidSecret = 'bad-secret'
+          return supertest(app)
+            .get(endpoint.path)
+            .set('Authorization', helpers.makeAuthHeader(validUser, invalidSecret))
+            .expect(401, {error: `Unauthorized request`})
+
+        })
+
+        it(`responds 401 'Unauthorized request' when invalid user`, () => {
+          const userInvalidCreds = {user_name:'user-not', password:'exists'}
+          return supertest(app)
+            .get(endpoint.path)
+            .set('Authorization', helpers.makeAuthHeader(userInvalidCreds))
+            .expect(401, {error: `Unauthorized request`})
+        })
+
+        it(`responds with 401 'Unauthorized request' when invalid password`, () => {
+          const userInvalidPass = {user_name:testUsers[0].user_name, password: 'wrong'}
+          return supertest(app)
+            .get(endpoint.path)
+            .set('Authorization', helpers.makeAuthHeader(userInvalidPass))
+            .expect(401, {error:`Unauthorized request`})
+        })
+      })
     })
 
-    const requiredFields = ['text', 'rating', 'thing_id']
+  })
 
-    requiredFields.forEach(field => {
-      const testThing = testThings[0]
-      const testUser = testUsers[0]
-      const newReview = {
-        text: 'Test new review',
-        rating: 3,
-        thing_id: testThing.id,
-      }
+  describe(`GET /api/experiments`, () => {
+    before(() =>
+      helpers.seedUsers(db, testUsers)
+    )
+    context(`Given no experiments`, () => {
+      it(`responds with 200 and an empty list`, () => {
+        return supertest(app)
+          .get('/api/experiments')
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, [])
+      })
+    })
 
-      it(`responds with 400 and an error message when the '${field}' is missing`, () => {
-        delete newReview[field]
+    context('Given there are experiments in the database', () => {
+      before('cleanup', () => helpers.cleanTables(db))
+      before('insert experiments', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+          testImages,
+          testRegions,
+        )
+      )
+
+      it('responds with 200 and all of the user experiments', () => {
+        testUsers.forEach((user) => {
+          const expectedExperiments = testExperiments.map(experiment =>
+            helpers.makeExpectedExperiment(
+              testUsers,
+              experiment,
+              testImages,
+              testRegions,
+            )
+          )
+          return supertest(app)
+            .get('/api/experiments')
+            .set('Authorization', helpers.makeAuthHeader(user))
+            .expect(200, expectedExperiments)
+        })
+      })
+    })
+
+    context(`Given an XSS attack experiment`, () => {
+      const testUser = helpers.makeUsersArray()[1]
+      const {
+        maliciousExperiment,
+        expectedExperiment,
+      } = helpers.makeMaliciousExperiment(testUser)
+
+      beforeEach('insert malicious experiment', () => {
+        return helpers.seedMaliciousExperiment(
+          db,
+          testUser,
+          maliciousExperiment,
+        )
+      })
+
+      it('removes XSS attack content', () => {
+        return supertest(app)
+          .get(`/api/experiments`)
+          .set('Authorization', helpers.makeAuthHeader(testUser))
+          .expect(200)
+          .expect(res => {
+            expect(res.body[0].celltype).to.eql(expectedExperiment.celltype)
+            expect(res.body[0].experiment_type).to.eql(expectedExperiment.experiment_type)
+          })
+      })
+    })
+  })
+
+  describe(`GET /api/experiments/:experiment_id`, () => {
+    context(`Given no experiments`, () => {
+      beforeEach(() =>
+        helpers.seedUsers(db, testUsers)
+      )
+      it(`responds with 404`, () => {
+        const experimentId = 123456
+        return supertest(app)
+          .get(`/api/experiments/${experimentId}`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(404, { error: `Experiment doesn't exist` })
+      })
+    })
+
+    context('Given there are experiments in the database', () => {
+
+      beforeEach('insert experiments', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+          testImages,
+          testRegions,
+        )
+      )
+
+      it('responds with 200 and the specified experiment', () => {
+        const experimentId = 1
+        const expectedExperiment = helpers.makeExpectedExperiment(
+          testUsers,
+          testExperiments[0],
+          testImages,
+          testRegions,
+        )
 
         return supertest(app)
-          .post('/api/reviews')
+          .get(`/api/experiments/${experimentId}`)
           .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-          .send(newReview)
-          .expect(400, {
-            error: `Missing '${field}' in request body`,
-          })
+          .expect(200, expectedExperiment)
+      })
+    })
+  })
+
+  describe(`GET /api/experiments/:experiment_id/images`, () => {
+    context(`Given no images`, () => {
+
+      beforeEach('insert images', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+        )
+      )
+      it(`responds with empty list`, () => {
+        const experimentId = 1
+        return supertest(app)
+          .get(`/api/experiments/${experimentId}/images`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, [])
+      })
+    })
+
+    context('Given there are images for experiment in the database', () => {
+
+      beforeEach('insert images', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+          testImages,
+          testRegions,
+        )
+      )
+
+      it('responds with 200 and the specified images', () => {
+        const experimentId = 1
+        const expectedImages = helpers.makeExpectedExperimentImages(
+          experimentId,
+          testImages
+        )
+
+        return supertest(app)
+          .get(`/api/experiments/${experimentId}/images`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, expectedImages)
+      })
+    })
+  })
+
+  describe(`GET /api/experiments/:experiment_id/regions`, () => {
+    context(`Given no regions`, () => {
+      beforeEach('insert regions', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+        )
+      )
+      it(`responds with empty list`, () => {
+        const experimentId = 1
+        return supertest(app)
+          .get(`/api/experiments/${experimentId}/regions`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, [])
+      })
+    })
+
+    context('Given there are regions for experiment in the database', () => {
+
+      beforeEach('insert regions', () =>
+        helpers.seedExperimentsTables(
+          db,
+          testUsers,
+          testExperiments,
+          testImages,
+          testRegions,
+        )
+      )
+
+      it('responds with 200 and the specified regions', () => {
+        const experimentId = 1
+        const expectedRegions = helpers.makeExpectedExperimentRegions(
+          experimentId, testRegions
+        )
+
+        return supertest(app)
+          .get(`/api/experiments/${experimentId}/regions`)
+          .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+          .expect(200, expectedRegions)
       })
     })
   })

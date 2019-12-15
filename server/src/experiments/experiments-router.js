@@ -11,11 +11,15 @@ const experimentsRouter = express.Router()
 experimentsRouter.route('/')
   .all(requireAuth)
   .get((req, res, next) => {
-    ExperimentsService.getAllUserExperiments(req.app.get('db'), req.user.user_name)
+    ExperimentsService.getAllexperiments(req.app.get('db'))
       .then(experiments => {
-        res.status(200)
-        res.json(ExperimentsService.serializeExperiments(experiments))
+        experiments = experiments.filter(experiment => experiment.user_id === req.user.id)
+        return experiments
       })
+      .then(data => {
+        res.status(200)
+        res.json(ExperimentsService.serializeExperiments(data))
+    })
       .catch(next)
   })
   .post(jsonBodyParser, (req, res, next) => {
@@ -43,9 +47,16 @@ experimentsRouter.route('/:experiment_id')
   .all(checkExperimentExists)
   .get((req, res, next) => {
     ExperimentsService.getByUserAndId(req.app.get('db'), req.user.user_name, req.params.experiment_id)
-      .then(experiments => {
-        res.status(200)
-        res.json(ExperimentsService.serializeExperiments(experiments))
+      .then(experiment => {
+        if (!experiment) {
+          res.status(404)
+          return res.json('Experiment not found')
+        }
+        else {
+          res.status(200)
+          res.json(ExperimentsService.serializeExperiment(experiment))
+        }
+
       })
       .catch(next)
   })
@@ -99,7 +110,7 @@ experimentsRouter.route('/:experiment_id/regions')
       req.params.experiment_id
     )
       .then(regions => {
-        res.status(201)
+        res.status(200)
         res.json(RegionsService.serializeExperimentRegions(regions))
       })
       .catch(next)

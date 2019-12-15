@@ -51,14 +51,14 @@ function makeExperimentsArray(users) {
       id: 2,
       celltype: 'Test Cells 2',
       experiment_type: 'Calibration',
-      user_id: users[0].id,
+      user_id: users[1].id,
       date_created: '2021-01-22T16:28:32.615Z',
     },
     {
       id: 3,
       celltype: 'Test Cells 3',
       experiment_type: 'Calibration',
-      user_id: users[1].id,
+      user_id: users[2].id,
       date_created: '2020-01-22T16:28:32.615Z',
     },
   ]
@@ -70,7 +70,7 @@ function makeImagesArray(experiments) {
 			id: 1,
 			experiment_id: experiments[0].id,
 			date_created: '2029-01-22T16:28:32.615Z',
-			image_url: 'http://localhost:8000/api/images/image-1575343884666.jpeg',
+			image_url: 'http://localhost:8000/api/images/default.jpeg',
 			image_width: 123,
 			image_height: 120,
 		},
@@ -78,7 +78,7 @@ function makeImagesArray(experiments) {
 			id: 2,
 			experiment_id: experiments[1].id,
 			date_created: '2029-01-22T16:12:32.433Z',
-			image_url: 'http://localhost:8000/api/images/image-1575346548427.jpeg',
+			image_url: 'http://localhost:8000/api/images/default.jpeg',
 			image_width: 122,
 			image_height: 192,
 		},
@@ -86,7 +86,7 @@ function makeImagesArray(experiments) {
 			id: 3,
 			experiment_id: experiments[2].id,
 			date_created: '2029-01-22T16:12:32.433Z',
-			image_url: 'http://localhost:8000/api/images/image-1575346548427.jpeg',
+			image_url: 'http://localhost:8000/api/images/defaul2.jpeg',
 			image_width: 122,
 			image_height: 192,
 		},
@@ -150,74 +150,64 @@ function makeExpectedExperiment(users, experiment, images=[], regions=[]) {
   const user = users
     .find(user => user.id === experiment.user_id)
 
-	const experimentImages = [images
-		.filter(image => image.experiment_id === experiment.id)]
-  const experimentRegions = [regions
-    .filter(region => region.experiment_id  === experiment.id)]
-
-  const number_of_regions = experimentRegions.length
-	const number_of_images = experimentImages.length
+	// const experimentImages = [images
+	// 	.filter(image => image.experiment_id === experiment.id)]
+  // const experimentRegions = [regions
+  //   .filter(region => region.experiment_id  === experiment.id)]
 
   return {
     id: experiment.id,
+    celltype: experiment.celltype,
+    experiment_type: experiment.experiment_type,
+    date_created: experiment.date_created,
+    user_id: user.id
+  }
+}
+
+function makeExpectedExperimentImages(experimentId, images = []) {
+
+  const experimentImages = images
+    .filter(image => image.experiment_id === experimentId)
+
+  return [{
+    id: experimentImages[0].id,
     image_url: experimentImages[0].image_url,
     image_width: experimentImages[0].image_width,
     image_height: experimentImages[0].image_height,
-    celltype: experiment.celltype,
-    experiment_type: experiment.experiment_type,
-		regions: experimentRegions[0],
-    date_created: experiment.date_created,
-    number_of_regions,
-		number_of_images,
-    user: {
-      id: user.id,
-      user_name: user.user_name,
-      full_name: user.full_name,
-      nickname: user.nickname,
-      date_created: user.date_created,
-    },
-  }
+    date_created: experimentImages[0].date_created,
+    experiment_id: experimentId,
+  }]
 }
 
-function makeExpectedThingReviews(users, thingId, reviews) {
-  const expectedReviews = reviews
-    .filter(review => review.thing_id === thingId)
+function makeExpectedExperimentRegions(experimentId, regions = []) {
 
-  return expectedReviews.map(review => {
-    const reviewUser = users.find(user => user.id === review.user_id)
-    return {
-      id: review.id,
-      text: review.text,
-      rating: review.rating,
-      date_created: review.date_created,
-      user: {
-        id: reviewUser.id,
-        user_name: reviewUser.user_name,
-        full_name: reviewUser.full_name,
-        nickname: reviewUser.nickname,
-        date_created: reviewUser.date_created,
-      }
-    }
-  })
+  const experimentRegions = regions
+    .filter(region => region.experiment_id === experimentId)
+
+  return [{
+    id: experimentRegions[0].id,
+    regions: experimentRegions[0].regions,
+    date_created: experimentRegions[0].date_created,
+    experiment_id: experimentId,
+  }]
 }
 
-function makeMaliciousThing(user) {
-  const maliciousThing = {
+function makeMaliciousExperiment(user) {
+  const maliciousExperiment = {
     id: 911,
-    image: 'http://placehold.it/500x500',
+    celltype: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
     date_created: new Date().toISOString(),
-    title: 'Naughty naughty very naughty <script>alert("xss");</script>',
+    experiment_type: 'Naughty naughty very naughty <script>alert("xss");</script>',
     user_id: user.id,
-    content: `Bad image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
   }
-  const expectedThing = {
-    ...makeExpectedThing([user], maliciousThing),
-    title: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
-    content: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+  const expectedExperiment = {
+    ...makeExpectedExperiment([user], maliciousExperiment),
+    experiment_type: 'Naughty naughty very naughty &lt;script&gt;alert(\"xss\");&lt;/script&gt;',
+    celltype: `Bad image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
   }
   return {
-    maliciousThing,
-    expectedThing,
+    maliciousExperiment,
+    expectedExperiment,
   }
 }
 
@@ -259,13 +249,13 @@ function seedExperimentsTables(db, users, experiments, images=[], regions=[]) {
 	return db.transaction(async trx =>{
 		await seedUsers(trx, users)
 		await trx.into('experiments').insert(experiments)
-		// await trx.into('thingful_things').insert(reviews)
+		// await trx.into('experiments').insert(images)
 		await trx.raw(
 			`SELECT setval('experiments_id_seq', ?)`,
-			[experiments[experiments.length -1].id],
+			experiments[experiments.length -1].id,
     )
     images.length && await trx.into('images').insert(images)
-    regions.length && await trx.into('regions').insert(regions)
+    regions.length && await trx.into('experiment_regions').insert(regions)
 	})
 }
 
@@ -286,6 +276,10 @@ function makeAuthHeader(user, secret=process.env.JWT_SECRET) {
   return `Bearer ${token}`
 }
 
+function makeBasicAuthHeader(user) {
+  const token = Buffer.from(`${user.user_name}:${user.password}`).toString('base64')
+  return `Basic ${token}`
+}
 module.exports = {
   makeUsersArray,
   makeExperimentsArray,
@@ -295,7 +289,7 @@ module.exports = {
   makeExpectedExperimentImages,
 	makeExpectedExperimentRegions,
   makeMaliciousExperiment,
-
+  makeBasicAuthHeader,
   makeExperimentsFixtures,
   cleanTables,
   seedExperimentsTables,

@@ -27,8 +27,8 @@ export default class Regions extends React.Component {
                 fill="transparent"
                 stroke={region.color}
                 strokeWidth={3}
-                width={region.regionSize || 28}
-                height={region.regionSize || 28}
+                width={region.regionSize || this.context.regionSize}
+                height={region.regionSize || this.context.regionSize}
                 onClick={() => {
                   this.context.selectRegion(region.id)
                 }}

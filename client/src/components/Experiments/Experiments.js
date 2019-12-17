@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { NiceDate } from '../Utils/Utils'
 import MarkupContext from '../../contexts/MarkupContext'
 import ExperimentApiService from '../../services/experiment-api-service'
@@ -82,16 +81,6 @@ export default class Experiments extends Component {
           regions={this.state.regions[i][0].regions.data}
           onClick={this.displayRegion}
         />
-      )
-    }
-  }
-
-  renderImages(i) {
-    if (this.state.images[i].length > 0) {
-      return (
-          <img className="expimage"
-            src={this.state.images[i][0].image_url}>
-          </img>
       )
     }
   }

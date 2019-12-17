@@ -134,7 +134,7 @@ export default class Upload extends Component {
     let scale = this.context.regionSize / region.regionSize
     const newPosition = {
       x: this.containerRef.current.offsetWidth / 2 - regionPoint.x * scale ,
-      y: this.containerRef.current.offsetHeight / 2 - regionPoint.y*scale
+      y: this.containerRef.current.offsetHeight / 2 - regionPoint.y * scale
     }
     stage.tween = new Konva.Tween({
       node: stage,
@@ -145,9 +145,6 @@ export default class Upload extends Component {
       scaleX: scale,
       scaleY: scale,
     })
-    // stage.scale({x: scale, y: scale})
-    // stage.position(newPosition)
-    // stage.batchDraw()
     this.setState({
       ...this.state,
       position: newPosition,
@@ -344,8 +341,6 @@ export default class Upload extends Component {
       x: region.point.x,
       y: region.point.y,
       listening: false,
-      // x: region.point.x - region.regionSize / this.state.scale / 2,
-      // y: (region.point.y - region.regionSize / this.state.scale / 2),
       fill: "transparent",
       strokeWidth: 5 / this.state.scale,
       stroke: region.color,
@@ -442,7 +437,10 @@ export default class Upload extends Component {
 
           </div>
           <button className="menu" onClick={this.createCellRegion}>Mark Cell</button>
-          {/* <button className="menu" onClick={()=>{this.setState({debug: !this.state.debug})}}>Debug</button> */}
+
+          {this.state.debug &&
+            <button className="menu" onClick={() => { this.setState({ debug: !this.state.debug }) }}>Debug</button>
+          }
 
           {this.context.regions.regions.data.length >= 0 &&
             this.state.uploaded &&

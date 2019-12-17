@@ -7,7 +7,7 @@ export default class Landing extends Component {
     return (
       <>
         <section>
-          <img className="splash" src="/Completed 2.jpg"></img>
+          <img className="splash" src="/Completed 2.jpg" alt="Visiri"></img>
           <Link to="/register" className="menu">Register</Link>
           <Link to="/login" className="menu">Login</Link>
           <Link className="menu" to="/upload">Demo</Link>

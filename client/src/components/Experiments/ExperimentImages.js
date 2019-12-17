@@ -40,13 +40,13 @@ export default class ExperimentImages extends Component {
           src={this.state.images[0].image_url ?
             this.state.images[0].image_url :
             this.context.image.src
-          }>
+          } alt="Experiment">
           </img>
         }
         {this.state.imagesLoaded &&
-          this.state.images.length == 0 &&
+          this.state.images.length === 0 &&
           <img className="expimage"
-            src={this.context.image.src}>
+            src={this.context.image.src} alt="Experiment">
           </img>
         }
       </>

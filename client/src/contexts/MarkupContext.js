@@ -1,22 +1,6 @@
 import React, { Component } from 'react'
-import ExperimentApiService from '../services/experiment-api-service'
 
-const MarkupContext = React.createContext({
-  image: {
-    src: null,
-    width: null,
-    height: null,
-    magnification: null,
-  },
-  experimentName: null,
-  experimentType: 'calibration',
-  cellType: null,
-  cellDiameter: null,
-  scaling: null,
-  // setImage: (dataUrl) => { },
-  // setExperiment: (name, type) => { },
-  // setDiameter: () => { },
-})
+const MarkupContext = React.createContext()
 
 export default MarkupContext
 
@@ -31,6 +15,7 @@ export class MarkupContextProvider extends Component {
       width: null,
       height: null,
       magnification: null,
+      demo: false,
     },
     setImageSrc: this.setImageSrc,
     id: null,
@@ -45,36 +30,10 @@ export class MarkupContextProvider extends Component {
         data: [],
       }
     },
-      // {
-      //   "id": 1,
-      //   "date_created": "2019-12-07T21:05:05.248Z",
-      //   "experiment_id": 1,
-      //   "regions": {
-      //     "data": [
-      //       {
-      //         "color": "black",
-      //         "point": {
-      //           "x": "3",
-      //           "y": "5"
-      //         },
-      //         "regionSize": "65"
-      //       },
-      //       {
-      //         "color": "red",
-      //         "point": {
-      //           "x": "5",
-      //           "y": "2"
-      //         },
-      //         "regionSize": "24"
-      //       }
-      //     ]
-      //   }
-      // }
     selectedRegionId: null,
     selectRegion: this.selectRegion,
     regionSize: 56,
     setExperiment: this.setExperiment,
-    postImage: this.postImage,
   }
 
   getRegionById = (regionId) => {
@@ -151,7 +110,6 @@ export class MarkupContextProvider extends Component {
       regionSize: this.state.regionSize,
       setRegionSize: this.setRegionSize,
       setRegions: this.setRegions,
-      postImage: this.postImage,
     }
     return (
       <MarkupContext.Provider value={value}>

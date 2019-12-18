@@ -17,6 +17,9 @@
     "url": "git+https://github.com/zkhin/express-boilerplate.git"
   },
   "keywords": [],
+  "engines": {
+    "node": "10.16.3"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {

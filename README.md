@@ -32,7 +32,7 @@ experiment_type: 'Calibration',
 ```
     {  
       experiment_id: 1,  
-      regions: \[  
+      regions: [  
         {  
           color: '#ffffff',  
           point: {x: 123, y: 123},  
@@ -43,7 +43,7 @@ experiment_type: 'Calibration',
           point: {x: 321, y: 234},  
           size: 34  
         }  
-      ],  
+      ]  
     }
 ```
 - description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
@@ -51,6 +51,16 @@ experiment_type: 'Calibration',
 `/api/experiments/:experimentId/images`  
 - methods: `GET, POST`  
 - parameters: `[experimentId]`  
+- headers: `multipart/form-data`
+- example:  
+```
+{
+  experiment_id: 1,
+  image: [imagefile],
+  width: 123,
+  height: 123
+}
+```
 - description: Image files and metadata related to an experiment  
   
 ### Images  

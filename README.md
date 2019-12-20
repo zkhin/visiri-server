@@ -1,6 +1,6 @@
 # visiri API server
 - This server is based on the REST standards and provides backend functionality to the visiri client
-- Technologies used are node.js, express.js, and postgresql
+- Technologies used: node.js, express.js, and postgresql
 ## Summary
 - This server handles user registration, login, and password encryption and token based authentication
 - Data related to user created experiments such as cell type, experiment parameters, and labeled cell regions are handled by the server and stored as database models
@@ -29,19 +29,19 @@
 - example:  
 > {  
 >  experiment_id: 1,  
->  regions: \[
->>    {
+>  regions: \[  
+>>    {  
 >>>     color: '#ffffff',  
 >>>     point: {x: 123, y: 123},  
->>>     size: 56
->>    },
->>    {
+>>>     size: 56  
+>>    },  
+>>    {  
 >>>     color: 'red',  
 >>>     point: {x: 321, y: 234},  
->>>     size: 34
->>    },
->  ]
-> }                
+>>>     size: 34  
+>>    },  
+>  ]  
+> }  
 - description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   
 `/api/experiments/:experimentId/images`  

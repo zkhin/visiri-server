@@ -13,9 +13,11 @@
   
 ### Experiments  
 `/api/experiments/:experimentId`  
-- methods: `GET, POST`  
-- parameters: `[experimentId]`  
-- example:  
+- Methods: `GET, POST`  
+- Parameters: `[experimentId]`  
+- Authorization: `Bearer [token]`  
+- Headers: `application/json`  
+- Example:  
 ```
 {  
 celltype: 2,  
@@ -23,12 +25,14 @@ experiment_type: 'Calibration',
 }  
 ```
 
-- description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
+- Description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
   
 `/api/experiments/:experimentId/regions`  
-- methods: `GET, POST`  
-- parameters: `[experimentId]`  
-- example:  
+- Methods: `GET, POST`  
+- Parameters: `[experimentId]`  
+- Authorization: `Bearer [token]`  
+- Headers: `application/json`  
+- Example:  
 ```
     {  
       experiment_id: 1,  
@@ -46,13 +50,14 @@ experiment_type: 'Calibration',
       ]  
     }
 ```
-- description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
+- Description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   
 `/api/experiments/:experimentId/images`  
-- methods: `GET, POST`  
-- parameters: `[experimentId]`  
-- headers: `multipart/form-data`
-- example:  
+- Methods: `GET, POST`  
+- Parameters: `[experimentId]`  
+- Authorization: `Bearer [token]`  
+- Headers: `multipart/form-data`
+- Example:  
 ```
 {
   experiment_id: 1,
@@ -61,10 +66,15 @@ experiment_type: 'Calibration',
   height: 123
 }
 ```
-- description: Image files and metadata related to an experiment  
+- Description: Image files and metadata related to an experiment  
   
 ### Images  
 `/api/images/:image`  
-- methods: `GET`  
-- parameters: `[image]` path to image file.  
+- Methods: `GET`  
+- Parameters: `[image]` path to image file.  
+- Example:  
+```
+https://visiri.now.sh/image-37682617835.jpeg
+```
+- Description: Encoded semi-private shareable image url of experiment images
   

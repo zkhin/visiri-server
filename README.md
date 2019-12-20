@@ -1,4 +1,4 @@
-# visiri API server  
+# Visiri API server  
 - This server is based on the REST standards and provides backend functionality to the visiri client  
 - Technologies used:  
   Node.js, Express.js  
@@ -16,6 +16,13 @@
 #### Authorized requests to the API should use an Authorization header with the value Bearer `TOKEN`, where `TOKEN` is an access token obtained through the authentication flow.  
   
 ### Experiments  
+#### Data related to an experiment that includes cell type, experiment type, date created, region data, and images 
+
+##### `https://.../api/experiments/`  
+- Methods: `GET`  
+- Authorization: `Bearer [token]`  
+- Description: List of all experiments created by a user.
+
 ##### `https://.../api/experiments/:experimentId`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
@@ -29,7 +36,7 @@ experiment_type: 'Calibration',
 }  
 ```
 
-- Description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
+- Description: Data related to an experiment that includes cell type, experiment type.  
   
 ##### `https://.../api/experiments/:experimentId/regions`  
 - Methods: `GET, POST`  

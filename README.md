@@ -29,11 +29,18 @@
 - example:  
 > {  
 >  experiment_id: 1,  
->  regions: 
->>   {\[
+>  regions: \[
+>>    {
 >>>     color: '#ffffff',  
 >>>     point: {x: 123, y: 123},  
->>   ]}  
+>>>     size: 56
+>>    },
+>>    {
+>>>     color: 'red',  
+>>>     point: {x: 321, y: 234},  
+>>>     size: 34
+>>    },
+>  ]
 > }                
 - description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   

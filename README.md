@@ -1,2 +1,10 @@
-Visiri is a react-based app on the client side that allows users to markup a microscopy image. Users take pictures of cells through a microscope and import the picture into the application. The application allows users to manually click on cells within the image to set small rectangular boxes that are used for live/dead cell counts in biological experiments. A viability percentage is calculated and displayed to the user.
-The application saves the image and cell counts/box regions to the server where multiple instances of these experiments are saved to an account. In the future, this image and region data will be used to train a convolutional neural network with a region proposal model so cell counts can be automatically performed.
+# visiri API server
+1. This server is based on the REST standards and provides backend functionality to the visiri client
+2. Technologies used are node.js, express.js, and postgresql
+## Summary
+1. This server handles user registration, login, and authentication with password encryption and token based authentication
+2. Data related to user created experiments such as cell type, experiment parameters, and labeled cell regions are handled by the server and stored as database models
+3. Images uploaded by users are stored on AWS servers with urls and metadata stored in the database itself
+4. Labeled image data can be used to generate training datasets for automated cell counting via convolutional neural networks
+
+## Endpoints

@@ -15,12 +15,12 @@
 `/api/experiments/:experimentId`  
 - methods: `GET, POST`  
 - parameters: `[experimentId]`  
-- example: `
+- example:  
 > {  
->> celltype: 2,  
->> experiment_type: 'Calibration',  
+>  celltype: 2,  
+>  experiment_type: 'Calibration',  
 > }  
-`
+
 - description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
   
 `/api/experiments/:experimentId/regions`  

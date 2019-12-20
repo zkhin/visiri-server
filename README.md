@@ -19,20 +19,33 @@
 #### Data related to an experiment that includes cell type, experiment type, date created, region data, and images 
 
 ##### `https://.../api/experiments/`  
-- Methods: `GET`  
+- Methods: `GET, POST`  
 - Authorization: `Bearer [token]`  
-- Description: List of all experiments created by a user.
+- Headers: `application/json`  
+- Example `POST`:  
+```
+{  
+  celltype: 'MCF-7 Breast Cancer Tissue',  
+  experiment_type: 'Calibration',
+}  
+```
+
+- Description: List of all experiments created by a user, or POST a new experiment.
 
 ##### `https://.../api/experiments/:experimentId`  
-- Methods: `GET, POST`  
+- Methods: `GET, DELETE, PATCH`  
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
 - Headers: `application/json`  
-- Example:  
+- Example `GET`:  
 ```
 {  
-celltype: 2,  
-experiment_type: 'Calibration',  
+  experiment_id: 1,
+  celltype: 'Some cells',  
+  experiment_type: 'Calibration',
+  date_created: 12/12/12,
+  date_modified: 12/12/12,
+  user_id: 123512
 }  
 ```
 
@@ -43,7 +56,7 @@ experiment_type: 'Calibration',
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
 - Headers: `application/json`  
-- Example:  
+- Example `POST`:  
 ```
     {  
       experiment_id: 1,  
@@ -59,7 +72,8 @@ experiment_type: 'Calibration',
           color: 'red',  
           point: {x: 321, y: 234},  
           size: 34  
-        }  
+        },
+        ...
       ]  
     }
 ```
@@ -70,7 +84,7 @@ experiment_type: 'Calibration',
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
 - Headers: `multipart/form-data`
-- Example:  
+- Example `POST`:  
 ```
 {
   experiment_id: 1,

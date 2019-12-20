@@ -15,16 +15,26 @@
 `/api/experiments/:experimentId`  
 - methods: `GET, POST`  
 - parameters: `[experimentId]`  
+- example: `
+> {  
+> celltype: 2,  
+> experiment_type: 'Calibration',  
+> }  
+`
 - description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
   
 `/api/experiments/:experimentId/regions`  
 - methods: `GET, POST`  
+- parameters: `[experimentId]`  
+- description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   
 `/api/experiments/:experimentId/images`  
-- methods: `POST`  
+- methods: `GET, POST`  
+- parameters: `[experimentId]`  
+- description: Image files and metadata related to an experiment  
   
 ### Images  
 `/api/images/:image`  
 - methods: `GET`  
-- parameters: `[image]` path to image file.
+- parameters: `[image]` path to image file.  
   

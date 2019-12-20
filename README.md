@@ -16,7 +16,7 @@
 #### Authorized requests to the API should use an Authorization header with the value Bearer `TOKEN`, where `TOKEN` is an access token obtained through the authentication flow.  
   
 ### Experiments  
-`/api/experiments/:experimentId`  
+`https://.../api/experiments/:experimentId`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
@@ -31,7 +31,7 @@ experiment_type: 'Calibration',
 
 - Description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
   
-`/api/experiments/:experimentId/regions`  
+`https://.../api/experiments/:experimentId/regions`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
@@ -42,11 +42,13 @@ experiment_type: 'Calibration',
       experiment_id: 1,  
       regions: [  
         {  
+          id: 1,  
           color: '#ffffff',  
           point: {x: 123, y: 123},  
           size: 56  
         },  
         {  
+          id: 2,  
           color: 'red',  
           point: {x: 321, y: 234},  
           size: 34  
@@ -56,7 +58,7 @@ experiment_type: 'Calibration',
 ```
 - Description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   
-`/api/experiments/:experimentId/images`  
+`https://.../api/experiments/:experimentId/images`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
@@ -73,12 +75,12 @@ experiment_type: 'Calibration',
 - Description: Image files and metadata related to an experiment  
   
 ### Images  
-`/api/images/:image`  
+`https://.../api/images/:image`  
 - Methods: `GET`  
 - Parameters: `[image]` path to image file.  
 - Example:  
 ```
-https://visiri.now.sh/image-37682617835.jpeg
+https://.../api/images/image-37682617835.jpeg
 ```
 - Description: Encoded semi-private shareable image url of experiment images
   

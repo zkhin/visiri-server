@@ -12,15 +12,15 @@
 #### Authorized requests to the API should use an Authorization header with the value Bearer <TOKEN>, where <TOKEN> is an access token obtained through the authentication flow.
   
 `/api/experiments/:experimentId`  
-_description_: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
-_methods_: `GET, POST`  
-_parameters_: `[experimentId]`  
+-description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images  
+-methods: `GET, POST`  
+-parameters: `[experimentId]`  
 
 `/api/experiments/:experimentId/regions`  
-_methods_: `GET, POST`  
+-methods: `GET, POST`  
 
 `/api/experiments/:experimentId/images`  
-_methods_: `POST`  
+-methods: `POST`  
 
 `/api/images/:image`  
-_methods_: `GET`  
+-methods: `GET`  

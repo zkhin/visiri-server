@@ -14,7 +14,7 @@
 `/api/experiments/:experimentId`
 Description: Data related to an experiment that includes cell type, experiment type, date created, region data, and images
 - methods: `GET, POST`
-Parameters: `[experimentId]`
+-- Parameters: `[experimentId]`
 
 `/api/experiments/:experimentId/regions`
 - methods: `GET, POST`

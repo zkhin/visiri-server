@@ -23,7 +23,7 @@
 `/api/experiments/:experimentId/images`  
 - methods: `POST`  
   
-  ### Images
+  ### Images  
 `/api/images/:image`  
 - methods: `GET`  
 - parameters: `[image]` path to image file.

@@ -26,6 +26,15 @@
 `/api/experiments/:experimentId/regions`  
 - methods: `GET, POST`  
 - parameters: `[experimentId]`  
+- example:  
+> {  
+>  experiment_id: 1,  
+>  regions: 
+> {\[
+>   color: '#ffffff',  
+>   point: {x: 123, y: 123},    
+> \]}  
+>                 
 - description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
   
 `/api/experiments/:experimentId/images`  

@@ -11,7 +11,7 @@
 
 #### Authorized requests to the API should use an Authorization header with the value Bearer `TOKEN`, where `TOKEN` is an access token obtained through the authentication flow.
   
-  ### Experiments  
+### Experiments  
 `/api/experiments/:experimentId`  
 - methods: `GET, POST`  
 - parameters: `[experimentId]`  
@@ -23,7 +23,7 @@
 `/api/experiments/:experimentId/images`  
 - methods: `POST`  
   
-  ### Images  
+### Images  
 `/api/images/:image`  
 - methods: `GET`  
 - parameters: `[image]` path to image file.

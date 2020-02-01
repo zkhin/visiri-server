@@ -12,7 +12,7 @@ const AuthService = {
       .then(user =>
         AuthService.getUserWithUserName(db, user.user_name)
     )
-    .then(res=>console.log(res))
+    .then(user=>user)
 
   },
   getUserWithUserName(db, user_name) {

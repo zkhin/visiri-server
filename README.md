@@ -1,5 +1,5 @@
 # Visiri API server  
-- This server is based on the REST standards and provides backend functionality to the visiri [app](https://visiri.now.sh) 
+- This server is based on the REST standards and provides backend functionality to the [Visiri App](https://visiri.now.sh) 
 - Client [repo](https://github.com/zkhin/visiri-client)
 - Technologies used:  
   Node.js, Express.js  

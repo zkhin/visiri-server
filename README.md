@@ -30,9 +30,8 @@
   experiment_type: 'Calibration',
 }  
 ```
-
 - Description: List of all experiments created by a user, or POST a new experiment.
-
+---
 ##### `https://.../api/experiments/:experimentId`  
 - Methods: `GET`  
 - Parameters: `[experimentId]`  
@@ -49,9 +48,8 @@
   user_id: 123512
 }  
 ```
-
 - Description: Data related to an experiment that includes cell type, experiment type.  
-  
+---
 ##### `https://.../api/experiments/:experimentId/regions`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
@@ -79,7 +77,7 @@
     }
 ```
 - Description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
-  
+---
 ##### `https://.../api/experiments/:experimentId/images`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
@@ -95,7 +93,7 @@
 }
 ```
 - Description: Image files and metadata related to an experiment  
-  
+---
 ### Images  
 ##### `https://.../api/images/:image`  
 - Methods: `GET`  

@@ -1,4 +1,5 @@
 # Visiri API server  
+- Server API endpoint (deployed on Heroku): [Server Status](https://infinite-brushlands-69470.herokuapp.com/api/)
 - This server is based on the REST standards and provides backend functionality to the [Visiri App](https://visiri.now.sh) 
 - Client [repo](https://github.com/zkhin/visiri-client)
 - Technologies used:  

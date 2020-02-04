@@ -32,7 +32,7 @@
 }  
 ```
 - Description: List of all experiments created by a user, or POST a new experiment.
----
+___
 ##### `https://.../api/experiments/[:experimentId]`  
 - Methods: `GET`  
 - Parameters: `[experimentId]`  
@@ -50,7 +50,7 @@
 }  
 ```
 - Description: Data related to an experiment that includes cell type, experiment type.  
----
+___
 ##### `https://.../api/experiments/[:experimentId]/regions`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
@@ -78,7 +78,7 @@
     }
 ```
 - Description: Label data of cell regions with size, color coding, and coordinates for a single experiment  
----
+___
 ##### `https://.../api/experiments/[:experimentId]/images`  
 - Methods: `GET, POST`  
 - Parameters: `[experimentId]`  
@@ -94,7 +94,7 @@
 }
 ```
 - Description: Image files and metadata related to an experiment  
----
+___
 ### Images  
 ##### `https://.../api/images/[:image]`  
 - Methods: `GET`  

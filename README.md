@@ -34,7 +34,7 @@
 - Description: List of all experiments created by a user, or POST a new experiment.
 
 ##### `https://.../api/experiments/:experimentId`  
-- Methods: `GET, DELETE, PATCH`  
+- Methods: `GET`  
 - Parameters: `[experimentId]`  
 - Authorization: `Bearer [token]`  
 - Headers: `application/json`  

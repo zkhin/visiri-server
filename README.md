@@ -15,11 +15,11 @@
 
 ## Endpoints  
 
-#### Authorized requests to the API should use an Authorization header with the value Bearer `TOKEN`, where `TOKEN` is an access token obtained through the authentication flow.  
+Authorized requests to the API should use an Authorization header with the value Bearer `TOKEN`, where `TOKEN` is an access token obtained through the authentication flow.  
   
 ### Experiments  
 #### Data related to an experiment that includes cell type, experiment type, date created, region data, and images 
-
+___
 ##### `https://.../api/experiments/`  
 - Methods: `GET, POST`  
 - Authorization: `Bearer [token]`  
